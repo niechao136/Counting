@@ -7,26 +7,26 @@ public partial class AicsButton : ComponentBase
     
 }
 
-public enum ButtonSize
+public static class ButtonSize
 {
-    Small = 12,
-    Medium = 14,
-    Large = 16
+    public const string Small = "s";
+    public const string Medium = "m";
+    public const string Large = "l";
 }
 
-public enum ButtonType
+public static class ButtonType
 {
-    Primary = 0,
-    Secondary = 1,
-    OnStrong = 2,
-    Successful = 3,
-    Error = 4,
-    Warning = 5
+    public const string Primary = "primary";
+    public const string Secondary = "secondary";
+    public const string OnStrong = "on-strong";
+    public const string Successful = "successful";
+    public const string Error = "error";
+    public const string Warning = "warning";
 }
 
-public enum ButtonMode
+public static class ButtonMode
 {
-    Filled = 0,
-    Outlined = 1,
-    Text = 2
+    public const string Filled = "filled";
+    public const string Outlined = "outline";
+    public const string Text = "text";
 }

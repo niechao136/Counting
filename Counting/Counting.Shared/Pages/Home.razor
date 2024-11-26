@@ -9,6 +9,8 @@
 Your api url is <em>@Api</em>
 Your pos url is <em>@Pos</em>.
 
+<AicsButton Text="123" Mode="@ButtonMode.Filled" BeforeString="@Path.Static("/icon/navigation-bar/setting/add.svg")"></AicsButton>
+
 @code {
     private string Api => Config.GetConfig("URL:API");
     private string Pos => Config.GetConfig("URL:POS");

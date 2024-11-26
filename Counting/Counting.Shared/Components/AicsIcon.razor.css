@@ -1,1 +1,22 @@
 ﻿
+.aics-icon {
+    .mask-icon {
+        width: inherit;
+        height: inherit;
+        > div {
+            width: inherit;
+            height: inherit;
+
+            mask-repeat: no-repeat;
+            mask-position: center;
+        }
+    }
+    .image-icon {
+        width: inherit;
+        height: inherit;
+        > img {
+            width: inherit;
+            height: inherit;
+        }
+    }
+}
