@@ -1,17 +1,23 @@
 ﻿@page "/"
 @using Counting.Shared.Services
-@inject ICountingConfig Config
+@inject IAppSetting AppSetting
+@inject IAuthService AuthService
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Your api url is <em>@Api</em>
-Your pos url is <em>@Pos</em>.
-
-<AicsButton Text="123" Mode="@ButtonMode.Filled" BeforeString="@Path.Static("/icon/navigation-bar/setting/add.svg")"></AicsButton>
+Your pos url is <em>@Pos</em>
 
 @code {
-    private string Api => Config.GetConfig("URL:API");
-    private string Pos => Config.GetConfig("URL:POS");
+    private string Api => AppSetting.Get("URL:API");
+    private string Pos => AppSetting.Get("URL:POS");
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.LoginAsync("123");
+        Console.WriteLine(await AuthService.GetTokenAsync());
+    }
+
 }

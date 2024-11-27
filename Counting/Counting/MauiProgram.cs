@@ -28,8 +28,8 @@ namespace Counting
             builder.Configuration.AddConfiguration(config);
 
             // Add device-specific services used by the Counting.Shared project
-            builder.Services.AddSingleton<IFormFactor, FormFactor>();
-            builder.Services.AddSingleton<ICountingConfig, CountingConfig>();
+            builder.Services.AddSingleton<IAppSetting, AppSetting>();
+            builder.Services.AddSingleton<IAuthService, AuthService>();
 
             builder.Services.AddMauiBlazorWebView();
 

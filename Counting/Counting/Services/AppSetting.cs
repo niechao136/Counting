@@ -3,9 +3,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace Counting.Services;
 
-public class CountingConfig(IConfiguration configuration) : ICountingConfig
+public class AppSetting(IConfiguration configuration) : IAppSetting
 {
-    public string GetConfig(string key)
+    public string Get(string key)
     {
         return configuration[key] ?? "";
     }

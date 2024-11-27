@@ -1,6 +1,7 @@
 using Counting.Shared.Services;
 using Counting.Web.Components;
 using Counting.Web.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddScoped<AuthState>();
+builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+
 // Add device-specific services used by the Counting.Shared project
-builder.Services.AddSingleton<IFormFactor, FormFactor>();
-builder.Services.AddSingleton<ICountingConfig, CountingConfig>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IAppSetting, AppSetting>();
+builder.Services.AddSingleton<IAuthService, AuthService>();
 
 var app = builder.Build();
 
