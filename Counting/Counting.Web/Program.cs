@@ -1,22 +1,15 @@
 using Counting.Shared.Services;
 using Counting.Web.Components;
 using Counting.Web.Services;
-using Microsoft.AspNetCore.Components.Authorization;
+using Counting.Web.Client.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-builder.Services.AddAuthorization();
-builder.Services.AddCascadingAuthenticationState();
-
-builder.Services.AddScoped<AuthState>();
-builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+    .AddInteractiveWebAssemblyComponents();
 
 // Add device-specific services used by the Counting.Shared project
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<IAppSetting, AppSetting>();
 builder.Services.AddSingleton<IAuthService, AuthService>();
 
@@ -36,7 +29,9 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddAdditionalAssemblies(typeof(Counting.Shared._Imports).Assembly);
+    .AddInteractiveWebAssemblyRenderMode()
+    .AddAdditionalAssemblies(
+        typeof(Counting.Shared._Imports).Assembly,
+        typeof(Counting.Web.Client._Imports).Assembly);
 
 app.Run();

@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <ProjectReference Include="..\Counting.Shared\Counting.Shared.csproj"/>
+      <ProjectReference Include="..\Counting.Web.Client\Counting.Web.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="dist\BlazorDebugProxy\" />
+    <Folder Include="dist\wwwroot\_content\Counting.Shared\images\nav\" />
   </ItemGroup>
 
 </Project>
