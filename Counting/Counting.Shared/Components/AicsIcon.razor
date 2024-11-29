@@ -1,0 +1,43 @@
+﻿<div class="aics-icon">
+  @if (!string.IsNullOrEmpty(_maskStyle))
+  {
+    <div class="mask-icon">
+      <div style="@_maskStyle"></div>
+    </div>
+  }
+  @if (!string.IsNullOrEmpty(_imageSrc))
+  {
+    <div class="image-icon">
+      <img src="@_imageSrc" alt=""/>
+    </div>
+  }
+</div>
+
+@code {
+  [Parameter] public bool Disable { get; set; }
+  [Parameter] public bool KeepActive { get; set; }
+  [Parameter] public bool IsHover { get; set; }
+  [Parameter] public bool IsActive { get; set; }
+  [Parameter] public string SrcString { get; set; } = string.Empty;
+  [Parameter] public IconSrc SrcObject { get; set; } = new();
+
+  private string _imageSrc = string.Empty;
+  private string _maskStyle = string.Empty;
+
+  private string GetImage()
+  {
+    if (Disable) return SrcObject.Disable ?? SrcObject.Normal;
+    if (IsActive || KeepActive) return SrcObject.Active;
+    return IsHover ? SrcObject.Hover : SrcObject.Normal;
+  }
+
+  protected override void OnParametersSet()
+  {
+    _maskStyle = string.IsNullOrEmpty(SrcString)
+      ? string.Empty
+      : $"mask-image:url({SrcString});-webkit-mask-image:url({SrcString});";
+    _imageSrc = GetImage();
+    base.OnParametersSet();
+  }
+
+}

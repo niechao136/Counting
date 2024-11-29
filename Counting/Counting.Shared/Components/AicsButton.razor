@@ -1,0 +1,119 @@
+﻿@if (!string.IsNullOrEmpty(Href) && Mode == ButtonMode.Text)
+{
+  <a href="@Href">
+    <AicsButton
+      Disable="@Disable"
+      Is100="@Is100"
+      Text="@Text"
+      KeepActive="@KeepActive"
+      Mode="@Mode"
+      Size="@Size"
+      Type="@Type"
+      AfterObject="@AfterObject"
+      AfterString="@AfterString"
+      BeforeObject="@BeforeObject"
+      BeforeString="@BeforeString">
+    </AicsButton>
+  </a>
+}
+else
+{
+  <button
+    class="@_btnClass"
+    disabled="@Disable"
+    @onmousedown="Mousedown"
+    @onmouseup="Mouseup"
+    @onmouseenter="Mouseenter"
+    @onmouseleave="Mouseleave"
+    @onclick="Click">
+    <div class="btn-flex">
+      @if (!string.IsNullOrEmpty(BeforeString) || !string.IsNullOrEmpty(BeforeObject.Normal))
+      {
+        <AicsIcon
+          Disable="@Disable"
+          IsActive="@_isFocus"
+          IsHover="@_isHover"
+          KeepActive="@KeepActive"
+          SrcObject="@BeforeObject"
+          SrcString="@BeforeString">
+        </AicsIcon>
+      }
+      @if (!string.IsNullOrEmpty(Text))
+      {
+        <div class="btn-text">@Text</div>
+      }
+      @if (!string.IsNullOrEmpty(AfterString) || !string.IsNullOrEmpty(AfterObject.Normal))
+      {
+        <AicsIcon
+          Disable="@Disable"
+          IsActive="@_isFocus"
+          IsHover="@_isHover"
+          KeepActive="@KeepActive"
+          SrcObject="@AfterObject"
+          SrcString="@AfterString">
+        </AicsIcon>
+      }
+    </div>
+  </button>
+}
+
+@code {
+  [Parameter] public string Text { get; set; } = string.Empty;
+  [Parameter] public bool Is100 { get; set; }
+  [Parameter] public bool Disable { get; set; }
+  [Parameter] public string Href { get; set; } = string.Empty;
+  [Parameter] public bool KeepActive { get; set; }
+  [Parameter] public string Size { get; set; } = ButtonSize.Medium;
+  [Parameter] public string Type { get; set; } = ButtonType.Primary;
+  [Parameter] public string Mode { get; set; } = ButtonMode.Filled;
+  [Parameter] public string AfterString { get; set; } = string.Empty;
+  [Parameter] public IconSrc AfterObject { get; set; } = new();
+  [Parameter] public string BeforeString { get; set; } = string.Empty;
+  [Parameter] public IconSrc BeforeObject { get; set; } = new();
+  [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+  private bool _isFocus = false;
+  private bool _isHover = false;
+  private string _btnClass = "btn";
+
+  protected override void OnParametersSet()
+  {
+    _btnClass = "btn";
+    _btnClass += $" btn--{Size}";
+    _btnClass += $" btn--{Mode}";
+    _btnClass += $" btn--{Type}";
+    if (Mode != ButtonMode.Text && string.IsNullOrEmpty(Text))
+    {
+      var showBefore = !string.IsNullOrEmpty(BeforeString) || !string.IsNullOrEmpty(BeforeObject.Normal);
+      var showAfter = !string.IsNullOrEmpty(AfterString) || !string.IsNullOrEmpty(AfterObject.Normal);
+      if (showBefore || showAfter) _btnClass += $" btn--{Size}-circle";
+    }
+
+    if (Is100) _btnClass += " width-100";
+    base.OnParametersSet();
+  }
+
+  private void Mousedown()
+  {
+    _isFocus = true;
+    _isHover = false;
+  }
+  private void Mouseup()
+  {
+    _isFocus = false;
+    _isHover = true;
+  }
+  private void Mouseenter()
+  {
+    _isHover = true;
+  }
+  private void Mouseleave()
+  {
+    _isHover = false;
+  }
+  private void Click(MouseEventArgs args)
+  {
+    OnClick.InvokeAsync(args);
+  }
+
+}

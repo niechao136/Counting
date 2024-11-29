@@ -1,0 +1,131 @@
+﻿<div>
+  <input
+    type="@Type"
+    class="@_inputClass"
+    placeholder="@Placeholder"
+    disabled="@_disabled"
+    autocomplete="@AutoComplete"
+    name="@Name"
+    autofocus="@AutoFocus"
+    maxlength="@MaxLength"
+    minlength="@MinLength"
+    @bind-Value="@Value"
+    @onblur="Blur"
+    @onclick="Click"
+    @onfocus="Focus"
+    @oninput="Input"
+    @onkeydown="Keydown"
+    @onkeyup="Keyup"
+    @onmouseenter="Mouseenter"
+    @onmouseleave="Mouseleave"/>
+  @if (_showIcon)
+  {
+    <AicsButton
+      Size="@ButtonSize.Small"
+      Type="@ButtonType.Secondary"
+      Mode="@ButtonMode.Text"
+      Disable="@_disabled"
+      AfterObject="@AfterObject"
+      AfterString="@AfterString"
+      OnClick="IconClick"/>
+  }
+  @if (!string.IsNullOrEmpty(ErrorMessage) && !Disable && !Readonly && IsError)
+  {
+    <div>
+      <div class="input-text--error-message__content">@ErrorMessage</div>
+    </div>
+  }
+</div>
+
+@code {
+  [Parameter] public string AutoComplete { get; set; } = InputAutoComplete.On;
+  [Parameter] public bool AutoFocus { get; set; }
+  [Parameter] public bool Disable { get; set; }
+  [Parameter] public bool Readonly { get; set; }
+  [Parameter] public int MaxLength { get; set; } = 524288;
+  [Parameter] public int MinLength { get; set; }
+  [Parameter] public bool IsError { get; set; }
+  [Parameter] public string ErrorMessage { get; set; } = "";
+  [Parameter] public bool Is100 { get; set; }
+  [Parameter] public string Name { get; set; } = "";
+  [Parameter] public string Size { get; set; } = InputSize.Medium;
+  [Parameter] public string Placeholder { get; set; } = "";
+  [Parameter] public string Value { get; set; } = "";
+  [Parameter] public string Type { get; set; } = InputType.Text;
+  [Parameter] public string AfterString { get; set; } = string.Empty;
+  [Parameter] public IconSrc AfterObject { get; set; } = new();
+  [Parameter] public EventCallback<FocusEventArgs> OnBlur { get; set; }
+  [Parameter] public EventCallback<FocusEventArgs> OnFocus { get; set; }
+  [Parameter] public EventCallback<KeyboardEventArgs> OnKeydown { get; set; }
+  [Parameter] public EventCallback<KeyboardEventArgs> OnKeyup { get; set; }
+  [Parameter] public EventCallback<MouseEventArgs> OnIconClick { get; set; }
+
+  private bool _disabled;
+  private bool _showIcon;
+  private string _inputClass = "input-text";
+  private bool _isFocus;
+  private bool _isHover;
+  private bool _hasContent;
+
+  protected override void OnParametersSet()
+  {
+    _isFocus = false;
+    _isHover = false;
+    _hasContent = Value.Length > 0;
+    _disabled = Disable || Readonly;
+    _showIcon = !string.IsNullOrEmpty(AfterString) || !string.IsNullOrEmpty(AfterObject.Normal);
+    _inputClass = "input-text";
+    _inputClass += $" input-text--{Size}";
+    if (Disable) _inputClass += " input-text__disabled";
+    if (Readonly) _inputClass += " input-text__readonly";
+    if (_isFocus) _inputClass += " input-text__focus";
+    else if (_isHover) _inputClass += " input-text__hover";
+    else if (IsError) _inputClass += " input-text__error";
+    else if (_hasContent) _inputClass += " input-text__has-content";
+    if (_showIcon) _inputClass += " input-text--has-after-icon";
+    if (Is100) _inputClass += " width-100";
+  }
+
+  private void Mouseenter()
+  {
+    _isHover = true;
+  }
+  private void Mouseleave()
+  {
+    _isHover = false;
+  }
+  private void Keydown(KeyboardEventArgs args)
+  {
+    OnKeydown.InvokeAsync(args);
+  }
+  private void Keyup(KeyboardEventArgs args)
+  {
+    OnKeyup.InvokeAsync(args);
+  }
+  private void Click()
+  {
+    _isFocus = true;
+    _isHover = false;
+  }
+  private void Focus(FocusEventArgs args)
+  {
+    _isFocus = true;
+    _isHover = false;
+    OnFocus.InvokeAsync(args);
+  }
+  private void Blur(FocusEventArgs args)
+  {
+    _isFocus = false;
+    _isHover = true;
+    OnBlur.InvokeAsync(args);
+  }
+  private void Input()
+  {
+    _hasContent = Value.Length > 0;
+  }
+  private void IconClick(MouseEventArgs args)
+  {
+    OnIconClick.InvokeAsync(args);
+  }
+
+}
