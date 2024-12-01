@@ -19,7 +19,7 @@
 else
 {
   <button
-    class="@_btnClass"
+    class="@BtnClass"
     disabled="@Disable"
     @onmousedown="Mousedown"
     @onmouseup="Mouseup"
@@ -72,26 +72,27 @@ else
   [Parameter] public IconSrc BeforeObject { get; set; } = new();
   [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
 
+  private string BtnClass
+  {
+    get
+    {
+      var btnClass = "btn";
+      btnClass += $" btn--{Size}";
+      btnClass += $" btn--{Mode}";
+      btnClass += $" btn--{Type}";
+      if (Mode != ButtonMode.Text && string.IsNullOrEmpty(Text))
+      {
+        var showBefore = !string.IsNullOrEmpty(BeforeString) || !string.IsNullOrEmpty(BeforeObject.Normal);
+        var showAfter = !string.IsNullOrEmpty(AfterString) || !string.IsNullOrEmpty(AfterObject.Normal);
+        if (showBefore || showAfter) btnClass += $" btn--{Size}-circle";
+      }
+
+      if (Is100) btnClass += " width-100";
+      return btnClass;
+    }
+  }
   private bool _isFocus = false;
   private bool _isHover = false;
-  private string _btnClass = "btn";
-
-  protected override void OnParametersSet()
-  {
-    _btnClass = "btn";
-    _btnClass += $" btn--{Size}";
-    _btnClass += $" btn--{Mode}";
-    _btnClass += $" btn--{Type}";
-    if (Mode != ButtonMode.Text && string.IsNullOrEmpty(Text))
-    {
-      var showBefore = !string.IsNullOrEmpty(BeforeString) || !string.IsNullOrEmpty(BeforeObject.Normal);
-      var showAfter = !string.IsNullOrEmpty(AfterString) || !string.IsNullOrEmpty(AfterObject.Normal);
-      if (showBefore || showAfter) _btnClass += $" btn--{Size}-circle";
-    }
-
-    if (Is100) _btnClass += " width-100";
-    base.OnParametersSet();
-  }
 
   private void Mousedown()
   {

@@ -1,8 +1,12 @@
-﻿@page "/"
+﻿@page "/overview"
 @inject IAppSetting AppSetting
 
 <PageTitle>Home</PageTitle>
 
+<div>
+  <AicsInputText @bind-Value="@_input" OnChange="Change"></AicsInputText>
+</div>
+<div>@_input</div>
 <div style="display: flex;gap: 16px;">
   <AicsButton Text="登入" OnClick="Login"></AicsButton>
   <AicsButton Text="登出" OnClick="Logout"></AicsButton>
@@ -13,6 +17,8 @@
 @code {
 
   private string _text = "未登入";
+
+  private string _input = "";
 
   private async Task Login()
   {
@@ -29,6 +35,12 @@
   }
 
   private string Url => AppSetting.Get("URL:API");
+
+  private void Change(string value)
+  {
+    Console.WriteLine(_input);
+    Console.WriteLine(value);
+  }
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {

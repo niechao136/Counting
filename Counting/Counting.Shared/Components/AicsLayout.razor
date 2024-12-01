@@ -1,0 +1,27 @@
+﻿<div class="layout" style="@LayoutStyle">
+  <div class="layout--content">
+    @LayoutBody
+  </div>
+  <div class="layout--footer">
+    <img alt="" class="layout--footer__icon" src="@Icon"/>
+    <div class="layout--footer__content">
+      <div class="layout--footer__content--line1">
+        <div class="text">@Footer.WebVersion</div>
+        <div class="divider"></div>
+        <div class="text">@Footer.ServerVersion</div>
+      </div>
+      <div class="layout--footer__content--line2">
+        <div class="text">@Footer.Copyright</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code {
+  [Parameter] public RenderFragment? LayoutBody { get; set; }
+  [Parameter] public LayoutFooter Footer { get; set; } = new();
+  [Parameter] public string Background { get; set; } = StaticFile.HandlePath("images/component/layout/layout-bg.png");
+  [Parameter] public string Icon { get; set; } = StaticFile.HandlePath("images/component/layout/footer-icon.png");
+
+  private string LayoutStyle => $"background-image: url({Background})";
+}

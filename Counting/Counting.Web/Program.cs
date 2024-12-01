@@ -7,12 +7,22 @@ using AppSetting = Counting.Web.Services.AppSetting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var config = builder.Configuration;
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
   .AddInteractiveWebAssemblyComponents();
 
 // Add device-specific services used by the Counting.Shared project
 builder.Services.AddSingleton<IAppSetting, AppSetting>();
+builder.Services.AddScoped<ApiClient>(_ => new ApiClient(new HttpClient
+{
+  BaseAddress = new Uri(config["URL:API"] ?? string.Empty)
+}));
+builder.Services.AddScoped<PosClient>(_ => new PosClient(new HttpClient
+{
+  BaseAddress = new Uri(config["URL:POS"] ?? string.Empty)
+}));
 
 var app = builder.Build();
 
