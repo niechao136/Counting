@@ -1,0 +1,139 @@
+﻿@implements IAsyncDisposable
+
+<div class="login" style="@LoginStyle">
+  <div class="login--content">
+    @if (!string.IsNullOrEmpty(Text.Welcome))
+    {
+      <div class="login--content__welcome">@Text.Welcome</div>
+    }
+    <div class="login--content__title">@Text.Title</div>
+    <div class="login--content__input">
+      <div class="login--content__input-form">
+        <div class="login--content__input-box">
+          @if (ChangePassword)
+          {
+            <AicsInputPassword
+              @bind-Value="Account"
+              Placeholder="@Text.Account"
+              Is100="@true"/>
+          }
+          else
+          {
+            <AicsInputText
+              @bind-Value="Account"
+              Placeholder="@Text.Account"
+              Is100="@true"/>
+          }
+        </div>
+        <div class="login--content__input-divider"></div>
+        <div class="login--content__input-box">
+          <AicsInputPassword
+            @bind-Value="Password"
+            Placeholder="@Text.Password"
+            Is100="@true"/>
+        </div>
+      </div>
+      <div class="login--content__input-error-message">
+        <div class="login--content__input-error-message__content">
+          @Form.ErrorMessage
+        </div>
+      </div>
+    </div>
+    @if (!ChangePassword)
+    {
+      <div class="login--content__action">
+
+      </div>
+    }
+    <div class="login--content__submit">
+      <AicsButton
+        Size="@ButtonSize.Large"
+        Text="@Text.Login"
+        Is100="@true"
+        Disable="!AllowLogin"
+        OnClick="OnSubmit"/>
+    </div>
+    <div class="login--content__extra">
+      @LoginExtra
+    </div>
+  </div>
+  <div class="login--footer">
+    <img alt="" class="login--footer__icon" src="@Icon"/>
+    <div class="login--footer__content">
+      <div class="login--footer__content--line1">
+        <div class="text">@Footer.WebVersion</div>
+        <div class="divider"></div>
+        <div class="text">@Footer.ServerVersion</div>
+      </div>
+      <div class="login--footer__content--line2">
+        <div class="text">@Footer.Copyright</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code {
+  [Parameter] public bool ShowLanguage { get; set; }
+  [Parameter] public bool AllowLogin { get; set; }
+  [Parameter] public bool ChangePassword { get; set; }
+  [Parameter] public RenderFragment? LoginExtra { get; set; }
+  [Parameter] public LoginFooter Footer { get; set; } = new();
+  [Parameter] public LoginText Text { get; set; } = new();
+  [Parameter] public LoginForm Form { get; set; } = new();
+  [Parameter] public string Background { get; set; } = Common.HandlePath("images/component/layout/layout-bg.png");
+  [Parameter] public string Icon { get; set; } = Common.HandlePath("images/component/layout/footer-icon.png");
+  [Parameter] public EventCallback<LoginForm> FormChanged { get; set; }
+  [Parameter] public EventCallback<MouseEventArgs> OnSubmit { get; set; }
+
+  private string LoginStyle => $"background-image: url({Background})";
+  private string Account
+  {
+    get => Form.Account;
+    set
+    {
+      Form.Account = value;
+      FormChanged.InvokeAsync(Form);
+    }
+  }
+  private string Password
+  {
+    get => Form.Password;
+    set
+    {
+      Form.Password = value;
+      FormChanged.InvokeAsync(Form);
+    }
+  }
+
+  private DotNetObjectReference<AicsLogin>? _reference;
+
+  [JSInvokable]
+  public void EnterKeyup(string key)
+  {
+    Console.WriteLine(key);
+    if (key.ToLower() == "enter" && AllowLogin)
+    {
+      OnSubmit.InvokeAsync();
+    }
+  }
+
+  protected override void OnInitialized()
+  {
+    _reference = DotNetObjectReference.Create(this);
+  }
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender && Common.IsClient(JsRuntime))
+    {
+      await JsRuntime.InvokeVoidAsync("window.AicsLogin.AddWindowListener", _reference);
+    }
+  }
+  public async ValueTask DisposeAsync()
+  {
+    if (Common.IsClient(JsRuntime))
+    {
+      await JsRuntime.InvokeVoidAsync("window.AicsLogin.RemoveWindowListener", _reference);
+    }
+  }
+
+}

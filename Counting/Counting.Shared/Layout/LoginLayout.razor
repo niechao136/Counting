@@ -1,15 +1,10 @@
 ﻿@inherits LayoutComponentBase
-@inject ApiClient Api
 
-<AicsLayout Footer="@Footer">
-  <LayoutBody>
-    @Body
-  </LayoutBody>
-</AicsLayout>
+@Body
 
 @code {
 
-  private LayoutFooter Footer =>
+  private LoginFooter Footer =>
     new()
     {
       Copyright = "\u00a9 2024 Advantech Intelligent City Services Co., Ltd. (AiCS) All Rights Reserved.",
@@ -21,9 +16,7 @@
 
   protected override async Task OnInitializedAsync()
   {
-    var msg = await Api.Client.PostAsync("/api/server/info",
-      new StringContent(JsonConvert.SerializeObject(new {})));
-    var str = await msg.Content.ReadAsStringAsync();
+    var str = await Api.PostAsync("/api/server/info");
     var res = JsonConvert.DeserializeObject<JObject>(str);
     _server = res?["version"]?.ToString() ?? string.Empty;
   }

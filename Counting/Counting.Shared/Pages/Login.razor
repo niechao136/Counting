@@ -1,8 +1,15 @@
 ﻿@page "/"
 @layout LoginLayout
 
-<h3>Login</h3>
+<AicsLogin>
+  <LoginExtra>
+    <AicsButton
+      Mode="@ButtonMode.Text"
+      Text="Do not have an account yet? Click here."/>
+  </LoginExtra>
+</AicsLogin>
 
 @code {
-  
+  private string _account = string.Empty;
+  private string _password = string.Empty;
 }

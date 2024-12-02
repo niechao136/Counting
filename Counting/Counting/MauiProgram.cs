@@ -26,7 +26,14 @@ public static class MauiProgram
 
     // Add device-specific services used by the Counting.Shared project
     builder.Services.AddSingleton<IAppSetting, AppSetting>();
-    builder.Services.AddSingleton<IAuthService, AuthService>();
+    builder.Services.AddScoped<ApiClient>(_ => new ApiClient(new HttpClient
+    {
+      BaseAddress = new Uri(config["URL:API"] ?? string.Empty)
+    }));
+    builder.Services.AddScoped<PosClient>(_ => new PosClient(new HttpClient
+    {
+      BaseAddress = new Uri(config["URL:POS"] ?? string.Empty)
+    }));
 
     builder.Services.AddMauiBlazorWebView();
 
