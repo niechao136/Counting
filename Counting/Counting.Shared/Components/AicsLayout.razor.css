@@ -62,3 +62,17 @@
   min-width: 1px;
   background-color: var(--divider-color);
 }
+
+@media screen and (max-width: 767px) {
+  .layout--footer {
+    flex-direction: column;
+    margin: 0 16px;
+    width: calc(100% - 32px);
+    align-items: flex-start;
+    white-space: normal;
+  }
+  .layout--footer__content--line2 {
+    min-height: 14px;
+    height: unset;
+  }
+}
