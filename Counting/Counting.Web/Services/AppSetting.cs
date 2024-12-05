@@ -6,6 +6,6 @@ public class AppSetting(IConfiguration configuration) : IAppSetting
 {
   public string Get(string key)
   {
-    return configuration[key] ?? "";
+    return configuration[key] ?? string.Empty;
   }
 }

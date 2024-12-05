@@ -8,9 +8,9 @@ public partial class AicsLogin : ComponentBase
 
 public class LoginFooter
 {
-  public string WebVersion { get; set; } = string.Empty;
-  public string ServerVersion { get; set; } = string.Empty;
-  public string Copyright { get; set; } = string.Empty;
+  public string WebVersion { get; set; } = "1.0.0.4";
+  public string ServerVersion { get; set; } = "1.0.0.4";
+  public string Copyright { get; set; } = "\u00a9 2024 Advantech Intelligent City Services Co., Ltd. (AiCS) All Rights Reserved.";
 }
 
 public class LoginText
@@ -28,5 +28,6 @@ public class LoginForm
 {
   public string Account { get; set; } = string.Empty;
   public string Password { get; set; } = string.Empty;
+  public bool RememberMe { get; set; }
   public string ErrorMessage { get; set; } = string.Empty;
 }
