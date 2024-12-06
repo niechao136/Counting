@@ -3,22 +3,4 @@
 @Body
 
 @code {
-
-  private LoginFooter Footer =>
-    new()
-    {
-      Copyright = "\u00a9 2024 Advantech Intelligent City Services Co., Ltd. (AiCS) All Rights Reserved.",
-      ServerVersion = _server,
-      WebVersion = "1.0.0.4"
-    };
-
-  private string _server = string.Empty;
-
-  protected override async Task OnInitializedAsync()
-  {
-    var str = await Api.PostAsync("/api/server/info");
-    var res = JsonConvert.DeserializeObject<JObject>(str);
-    _server = res?["version"]?.ToString() ?? string.Empty;
-  }
-
 }

@@ -2,11 +2,13 @@
 
 <div class="@LoginClass" style="@LoginStyle">
   <div class="login--content">
-    @if (!string.IsNullOrEmpty(Text.Welcome))
-    {
-      <div class="login--content__welcome">@Text.Welcome</div>
-    }
-    <div class="login--content__title">@Text.Title</div>
+    <div class="login--content__header">
+      @if (ShowWelcome)
+      {
+        <div class="login--content__welcome">@Text.Welcome</div>
+      }
+      <div class="@TitleClass">@Text.Title</div>
+    </div>
     <div class="login--content__input">
       <div class="login--content__input-form">
         <div class="login--content__input-box">
@@ -125,7 +127,9 @@
       FormChanged.InvokeAsync(Form);
     }
   }
+  private bool ShowWelcome => !ChangePassword && !string.IsNullOrEmpty(Text.Welcome);
   private string LoginClass => $"login {(string.IsNullOrEmpty(Class) ? Class : string.Empty)}";
+  private string TitleClass =>  $"login--content__title {(ShowWelcome ? string.Empty : "change-password")}";
 
   private DotNetObjectReference<AicsLogin>? _reference;
 
@@ -142,14 +146,11 @@
     OnForget.InvokeAsync(Form);
   }
 
-  protected override void OnInitialized()
-  {
-    _reference = DotNetObjectReference.Create(this);
-  }
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
     if (firstRender && Common.IsClient(JsRuntime))
     {
+      _reference ??= DotNetObjectReference.Create(this);
       await JsRuntime.InvokeVoidAsync("window.AicsLogin.AddWindowListener", _reference);
     }
   }
@@ -157,6 +158,7 @@
   {
     if (Common.IsClient(JsRuntime))
     {
+      _reference ??= DotNetObjectReference.Create(this);
       await JsRuntime.InvokeVoidAsync("window.AicsLogin.RemoveWindowListener", _reference);
     }
   }

@@ -1,7 +1,11 @@
 ﻿@page "/"
 @layout LoginLayout
 
-<AicsLogin>
+<AicsLogin
+  @bind-Form="_form"
+  Footer="@_footer"
+  AllowLogin="@AllowLogin"
+  OnSubmit="SubmitLogin">
   <LoginExtra>
     <AicsButton
       Mode="@ButtonMode.Text"
@@ -10,6 +14,74 @@
 </AicsLogin>
 
 @code {
-  private string _account = string.Empty;
-  private string _password = string.Empty;
+  private LoginForm _form = new();
+  private LoginFooter _footer = new();
+
+  private bool AllowLogin => !string.IsNullOrEmpty(_form.Account) && !string.IsNullOrEmpty(_form.Password);
+
+  private async Task SubmitLogin()
+  {
+    if (!Common.EmailRegex.IsMatch(_form.Account))
+    {
+      _form.ErrorMessage = "Please enter a valid email";
+    }
+    else
+    {
+      var data = new JObject
+      {
+        new JProperty("password", Common.Md5String(_form.Password)),
+        new JProperty("username", _form.Account),
+        new JProperty("app_sec", new JObject
+        {
+          new JProperty("package", "storevue"),
+          new JProperty("type", "web")
+        })
+      };
+      var str = await Api.PostAsync("/api/login", data);
+      var res = JsonConvert.DeserializeObject<JObject>(str);
+      if (Convert.ToInt64(res?["status"]) == 1)
+      {
+        if (_form.RememberMe)
+        {
+          await Local.SetAsync(JsRuntime, "BLAZOR_COUNTING_REMEMBER", "true");
+          await Local.SetAsync(JsRuntime, "BLAZOR_COUNTING_EMAIL", _form.Account);
+        }
+        else
+        {
+          await Local.DeleteAsync(JsRuntime, "BLAZOR_COUNTING_REMEMBER");
+          await Local.DeleteAsync(JsRuntime, "BLAZOR_COUNTING_EMAIL");
+        }
+        await Session.SetAsync(JsRuntime, "BLAZOR_COUNTING_TOKEN", str);
+        Navigation.NavigateTo("/overview");
+      }
+    }
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender && Common.IsClient(JsRuntime))
+    {
+      var remember = await Local.GetAsync(JsRuntime, "BLAZOR_COUNTING_REMEMBER") == "true";
+      if (remember)
+      {
+        _form = new LoginForm
+        {
+          Account = await Local.GetAsync(JsRuntime, "BLAZOR_COUNTING_EMAIL"),
+          Password = string.Empty,
+          ErrorMessage = string.Empty,
+          RememberMe = remember
+        };
+      }
+      var str = await Api.PostAsync("/api/server/info");
+      var res = JsonConvert.DeserializeObject<JObject>(str);
+      _footer = new LoginFooter
+      {
+        Copyright = AppSetting.Get("INFO:COPYRIGHT"),
+        ServerVersion = res?["version"]?.ToString() ?? string.Empty,
+        WebVersion = AppSetting.Get("INFO:VERSION")
+      };
+      StateHasChanged();
+    }
+  }
+
 }

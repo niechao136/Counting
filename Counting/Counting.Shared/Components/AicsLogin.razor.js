@@ -7,7 +7,7 @@ window.AicsLogin = {
      * @param e {KeyboardEvent}
      */
     const listeners = (e) => {
-      obj.invokeMethodAsync("EnterKeyup", e.key)
+      obj.invokeMethodAsync("EnterKeyup", e.key || '')
     }
     window.addEventListener('keyup', listeners)
     this.windowEvents[obj] = listeners
