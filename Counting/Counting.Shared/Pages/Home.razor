@@ -1,56 +1,16 @@
 ﻿@page "/overview"
-@inject IAppSetting AppSetting
 
 <PageTitle>Home</PageTitle>
 
-<div>
-  <AicsInputText @bind-Value="@_input" OnChange="Change"></AicsInputText>
-</div>
-<div>@_input</div>
-<div style="display: flex;gap: 16px;">
-  <AicsButton Text="登入" OnClick="Login"></AicsButton>
-  <AicsButton Text="登出" OnClick="Logout"></AicsButton>
-</div>
-<div>@_text</div>
-<div>@Url</div>
+<AicsButton Text="登出" OnClick="Logout"></AicsButton>
 
 @code {
-
-  private string _text = "未登入";
-
-  private string _input = string.Empty;
-
-  private async Task Login()
-  {
-    // await AuthService.LoginAsync("123");
-    await Session.SetAsync(JsRuntime, "token", "123");
-    _text = "已登入";
-  }
 
   private async Task Logout()
   {
     // await AuthService.LogoutAsync();
-    await Session.DeleteAsync(JsRuntime, "token");
-    _text = "未登入";
-  }
-
-  private string Url => AppSetting.Get("URL:API");
-
-  private void Change(string value)
-  {
-    Console.WriteLine(_input);
-    Console.WriteLine(value);
-  }
-
-  protected override async Task OnAfterRenderAsync(bool firstRender)
-  {
-    var token = await Session.GetAsync(JsRuntime, "token");
-    var value = string.IsNullOrEmpty(token) ? "未登入" : "已登入";
-    if (value != _text)
-    {
-      _text = value;
-      StateHasChanged();
-    }
+    await Session.DeleteAsync(JsRuntime, "BLAZOR_COUNTING_TOKEN");
+    Navigation.NavigateTo("/");
   }
 
 }

@@ -17,14 +17,16 @@
             <AicsInputPassword
               @bind-Value="Account"
               Placeholder="@Text.Account"
-              Is100="@true"/>
+              Is100="@true"
+              IsError="@IsError"/>
           }
           else
           {
             <AicsInputText
               @bind-Value="Account"
               Placeholder="@Text.Account"
-              Is100="@true"/>
+              Is100="@true"
+              IsError="@IsError"/>
           }
         </div>
         <div class="login--content__input-divider"></div>
@@ -32,7 +34,8 @@
           <AicsInputPassword
             @bind-Value="Password"
             Placeholder="@Text.Password"
-            Is100="@true"/>
+            Is100="@true"
+            IsError="@IsError"/>
         </div>
       </div>
       <div class="login--content__input-error-message">
@@ -118,6 +121,7 @@
       FormChanged.InvokeAsync(Form);
     }
   }
+  private bool IsError => !string.IsNullOrEmpty(Form.ErrorMessage);
   private bool Remember
   {
     get => Form.RememberMe;

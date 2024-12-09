@@ -9,7 +9,8 @@ public static class Common
   public static string HandlePath(string path) => $"/_content/Counting.Shared/{path}";
 
   public static bool IsClient(IJSRuntime jsRuntime) =>
-    jsRuntime.GetType().ToString().Contains("DefaultWebAssemblyJSRuntime");
+    jsRuntime.GetType().ToString().Contains("DefaultWebAssemblyJSRuntime")
+    || jsRuntime.GetType().ToString().Contains("WebViewJSRuntime");
 
   public static string Md5String(string target) =>
     Convert.ToHexStringLower(Md5.ComputeHash(Encoding.UTF8.GetBytes(target)));

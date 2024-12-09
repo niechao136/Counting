@@ -74,6 +74,7 @@
   height: var(--input-error-message-height);
   line-height: var(--input-error-message-height);
   font-size: 12px;
+  padding-left: 17px;
   box-sizing: border-box;
   color: var(--input-grayscale-primary_error);
   position: relative;

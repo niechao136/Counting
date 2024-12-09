@@ -3,7 +3,23 @@ using System.Reactive.Subjects;
 
 namespace Counting.Shared.Stores;
 
-public class AppStore
+public static class AppStore
 {
-  private IObservable<int> _observable = Observable.Range(1, 5);
+  public static BehaviorSubject<List<string>> Loading = new([]);
+
+  public static void CloseLoading()
+  {
+    Loading.OnNext([]);
+  }
+
+  public static void StartLoading(string key)
+  {
+    Loading.OnNext(Loading.Value.Concat([key]).ToList());
+  }
+
+  public static void StopLoading(string key)
+  {
+    Loading.OnNext(Loading.Value.Where(s => s != key).ToList());
+  }
+
 }

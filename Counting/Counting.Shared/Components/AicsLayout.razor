@@ -1,0 +1,44 @@
+<div class="aics-layout">
+  <aside></aside>
+  <main>
+    <header class="header">
+      @if (ShowBack)
+      {
+        <div class="header--back">
+          <AicsButton
+            Class="header--back-icon"
+            Type="@ButtonType.OnStrong"
+            Mode="@ButtonMode.Text"
+            BeforeString="@Common.HandlePath("images/component/layout/header-back.svg")"
+            OnClick="BackClick"/>
+        </div>
+      }
+      <div>
+        @if (Breadcrumbs.Count > 0)
+        {
+          <div class="header--title--breadcrumb">
+            @for (var i = 0; i < Breadcrumbs.Count; i++)
+            {
+              var breadcrumb = Breadcrumbs[i];
+              <AicsButton
+                Size="@ButtonSize.Small"
+                Type="@ButtonType.OnStrong"
+                Mode="@ButtonMode.Text"
+                Text="@breadcrumb.Text"
+                Disable="@breadcrumb.Disabled"
+                OnClick="@(args => BreadcrumbClick.InvokeAsync((args, i, breadcrumb)))" />
+            }
+          </div>
+        }
+      </div>
+    </header>
+    <div class="body"></div>
+  </main>
+</div>
+
+@code {
+  [Parameter] public bool ShowBack { get; set; } = true;
+  [Parameter] public EventCallback<MouseEventArgs> BackClick { get; set; }
+  [Parameter] public List<HeaderBreadcrumb> Breadcrumbs { get; set; } = [];
+  [Parameter] public EventCallback<(MouseEventArgs, int, HeaderBreadcrumb)> BreadcrumbClick { get; set; }
+}

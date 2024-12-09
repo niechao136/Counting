@@ -1,17 +1,13 @@
 ﻿@page "/"
 @layout LoginLayout
 
+<PageTitle>Login</PageTitle>
+
 <AicsLogin
   @bind-Form="_form"
   Footer="@_footer"
   AllowLogin="@AllowLogin"
-  OnSubmit="SubmitLogin">
-  <LoginExtra>
-    <AicsButton
-      Mode="@ButtonMode.Text"
-      Text="Do not have an account yet? Click here."/>
-  </LoginExtra>
-</AicsLogin>
+  OnSubmit="SubmitLogin"/>
 
 @code {
   private LoginForm _form = new();
@@ -27,6 +23,7 @@
     }
     else
     {
+      AppStore.StartLoading("login");
       var data = new JObject
       {
         new JProperty("password", Common.Md5String(_form.Password)),
@@ -54,6 +51,7 @@
         await Session.SetAsync(JsRuntime, "BLAZOR_COUNTING_TOKEN", str);
         Navigation.NavigateTo("/overview");
       }
+      AppStore.StopLoading("login");
     }
   }
 

@@ -1,0 +1,41 @@
+@if (Show)
+{
+  <div class="@LoadingClass">
+    <div class="loading--background"></div>
+    @if (Type == LoadingType.Circle)
+    {
+      <div class="loading-circle--slot">
+        <div>
+          <img alt="" class="rotate" src="@(Common.HandlePath("images/component/loading/circle-40.svg"))"/>
+        </div>
+        @if (!string.IsNullOrEmpty(Text))
+        {
+          <div class="loading-circle--slot__text">@Text</div>
+        }
+      </div>
+    }
+  </div>
+}
+
+@code {
+  [Parameter] public string Type { get; set; } = LoadingType.Circle;
+  [Parameter] public bool Show { get; set; }
+  [Parameter] public bool ContainNav { get; set; } = true;
+  [Parameter] public bool Opacity { get; set; } = true;
+  [Parameter] public bool FullScreen { get; set; } = true;
+  [Parameter] public string Text { get; set; } = string.Empty;
+
+  private string LoadingClass
+  {
+    get
+    {
+      var loadingClass = "loading";
+      if (Opacity) loadingClass += " loading--opacity";
+      if (!FullScreen) return loadingClass;
+      loadingClass += " loading--full-screen";
+      loadingClass += $" loading--full-screen--{(ContainNav ? "with-nav" : "without-nav")}";
+      return loadingClass;
+    }
+  }
+
+}
