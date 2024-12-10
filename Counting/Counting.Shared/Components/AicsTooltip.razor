@@ -1,0 +1,63 @@
+<div class="tooltip">
+  <div
+    class="@TargetClass"
+    @onclick="Click"
+    @onblur="Blur"
+    @onfocus="Focus"
+    @onmouseenter="Mouseenter"
+    @onmouseleave="Mouseleave">
+    @TooltipTarget
+  </div>
+  @if (_show)
+  {
+    <div class="tooltip--content">
+      @TooltipContent
+    </div>
+  }
+</div>
+
+@code {
+  [Parameter] public RenderFragment? TooltipTarget { get; set; }
+  [Parameter] public RenderFragment? TooltipContent { get; set; }
+  [Parameter] public string Placement { get; set; } = TooltipPlacement.Top;
+  [Parameter] public string Trigger { get; set; } = TooltipTrigger.Mouseenter;
+
+  private string TargetClass => $"tooltip--target {Placement}";
+  private bool _show;
+
+  private void Click()
+  {
+    if (Trigger == TooltipTrigger.Click)
+    {
+      _show = !_show;
+    }
+  }
+  private void Blur()
+  {
+    if (Trigger == TooltipTrigger.Focus)
+    {
+      _show = false;
+    }
+  }
+  private void Focus()
+  {
+    if (Trigger == TooltipTrigger.Focus)
+    {
+      _show = true;
+    }
+  }
+  private void Mouseenter()
+  {
+    if (Trigger == TooltipTrigger.Mouseenter)
+    {
+      _show = true;
+    }
+  }
+  private void Mouseleave()
+  {
+    if (Trigger == TooltipTrigger.Mouseenter)
+    {
+      _show = false;
+    }
+  }
+}

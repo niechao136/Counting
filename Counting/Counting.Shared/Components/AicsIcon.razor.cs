@@ -11,5 +11,5 @@ public class IconSrc
   public string Normal { get; set; } = string.Empty;
   public string Hover { get; set; } = string.Empty;
   public string Active { get; set; } = string.Empty;
-  public string? Disable { get; set; }
+  public string Disable { get; set; } = string.Empty;
 }

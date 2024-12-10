@@ -68,8 +68,8 @@
         Disable="!AllowLogin"
         OnClick="OnSubmit"/>
     </div>
-    <div class="login--content__extra">
-      @LoginExtra
+    <div class="login--content__slot">
+      @LoginSlot
     </div>
   </div>
   <div class="login--footer">
@@ -91,7 +91,7 @@
   [Parameter] public bool ShowLanguage { get; set; }
   [Parameter] public bool AllowLogin { get; set; }
   [Parameter] public bool ChangePassword { get; set; }
-  [Parameter] public RenderFragment? LoginExtra { get; set; }
+  [Parameter] public RenderFragment? LoginSlot { get; set; }
   [Parameter] public string Class { get; set; } = string.Empty;
   [Parameter] public LoginFooter Footer { get; set; } = new();
   [Parameter] public LoginText Text { get; set; } = new();

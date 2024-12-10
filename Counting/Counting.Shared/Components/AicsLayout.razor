@@ -2,6 +2,13 @@
   <aside></aside>
   <main>
     <header class="header">
+      <div class="header--nav">
+        <AicsButton
+          Type="@ButtonType.OnStrong"
+          Mode="@ButtonMode.Text"
+          BeforeString="@Common.HandlePath("images/component/layout/menu.svg")"
+          OnClick="MenuClick"/>
+      </div>
       @if (ShowBack)
       {
         <div class="header--back">
@@ -13,27 +20,40 @@
             OnClick="BackClick"/>
         </div>
       }
-      <div>
+      <div class="@TitleClass">
         @if (Breadcrumbs.Count > 0)
         {
           <div class="header--title--breadcrumb">
             @for (var i = 0; i < Breadcrumbs.Count; i++)
             {
               var breadcrumb = Breadcrumbs[i];
+              var index = i;
               <AicsButton
                 Size="@ButtonSize.Small"
                 Type="@ButtonType.OnStrong"
                 Mode="@ButtonMode.Text"
                 Text="@breadcrumb.Text"
                 Disable="@breadcrumb.Disabled"
-                OnClick="@(args => BreadcrumbClick.InvokeAsync((args, i, breadcrumb)))" />
+                OnClick="@(args => BreadcrumbClick.InvokeAsync((args, index, breadcrumb)))"/>
+              <img alt="" src="@Common.HandlePath("images/component/layout/next.svg")"/>
             }
           </div>
         }
+        <div class="header--title--content">@Title</div>
+      </div>
+      <div class="header--slot">
+        @HeaderSlot
       </div>
     </header>
     <div class="body"></div>
   </main>
+  <div class="@NavHiddenClass">
+    <div class="nav-hidden--background" @onclick="CloseBackdrop">
+      <div class="nav-hidden--main">
+
+      </div>
+    </div>
+  </div>
 </div>
 
 @code {
@@ -41,4 +61,20 @@
   [Parameter] public EventCallback<MouseEventArgs> BackClick { get; set; }
   [Parameter] public List<HeaderBreadcrumb> Breadcrumbs { get; set; } = [];
   [Parameter] public EventCallback<(MouseEventArgs, int, HeaderBreadcrumb)> BreadcrumbClick { get; set; }
+  [Parameter] public string Title { get; set; } = "Page Title";
+  [Parameter] public RenderFragment? HeaderSlot { get; set; }
+
+  private string TitleClass => $"header--title{(Breadcrumbs.Count > 0 ? " header--title--with-breadcrumb" : "")}";
+  private string NavHiddenClass => $"nav-hidden{(_showMenu ? " display-black" : " display-none")}";
+
+  private bool _showMenu;
+
+  private void MenuClick()
+  {
+    _showMenu = true;
+  }
+  private void CloseBackdrop()
+  {
+    _showMenu = false;
+  }
 }

@@ -1,5 +1,138 @@
-﻿<h3>AicsDropdown</h3>
+﻿<div class="@DropdownClass" @onblur="Blur">
+  <div
+    class="dropdown-select--tags"
+    @onclick="ToggleClick"
+    @onmouseenter="Mouseenter"
+    @onmouseleave="Mouseleave">
+    @if (Mode == DropdownMode.Icon)
+    {
+      <div class="dropdown-select--icon">
+        <AicsButton
+          Mode="@ButtonMode.Text"
+          Disable="@(Disable || Readonly)"
+          BeforeString="@IconString"
+          BeforeObject="@IconObject"/>
+      </div>
+    }
+    <div class="dropdown-select--tags-content">
+
+    </div>
+  </div>
+</div>
 
 @code {
+  [Parameter] public string Size { get; set; } = DropdownSize.Medium;
+  [Parameter] public string Mode { get; set; } = DropdownMode.Outline;
+  [Parameter] public List<DropdownOption> Option { get; set; } = [];
+  [Parameter] public List<string> Value { get; set; } = [];
+  [Parameter] public EventCallback<List<string>> ValueChanged { get; set; }
+  [Parameter] public EventCallback<List<string>> OnChange { get; set; }
+  [Parameter] public EventCallback<List<string>> OnInput { get; set; }
+  [Parameter] public bool Multiple { get; set; }
+  [Parameter] public string Placeholder { get; set; } = "Select option";
+  [Parameter] public string SearchPlaceholder { get; set; } = "Search";
+  [Parameter] public int Max { get; set; }
+  [Parameter] public bool Disable { get; set; }
+  [Parameter] public bool Readonly { get; set; }
+  [Parameter] public bool IsError { get; set; }
+  [Parameter] public string ErrorMessage { get; set; } = string.Empty;
+  [Parameter] public bool Is100 { get; set; }
+  [Parameter] public bool ShowAll { get; set; } = true;
+  [Parameter] public bool ShowSearch { get; set; } = true;
+  [Parameter] public bool AllowEmpty { get; set; } = true;
+  [Parameter] public bool CloseOnSelect { get; set; } = true;
+  [Parameter] public DropdownText Text { get; set; } = new();
+  [Parameter] public DropdownIcon Icon { get; set; } = new DropdownIcon
+  {
+    SelectedObject = new IconSrc
+    {
+      Normal = Common.HandlePath("images/component/filter-active/normal.svg"),
+      Active = Common.HandlePath("images/component/filter-active/active.svg"),
+      Hover = Common.HandlePath("images/component/filter-active/hover.svg"),
+      Disable = Common.HandlePath("images/component/filter-active/disable.svg")
+    },
+    UnselectedObject = new IconSrc
+    {
+      Normal = Common.HandlePath("images/component/filter/normal.svg"),
+      Active = Common.HandlePath("images/component/filter/active.svg"),
+      Hover = Common.HandlePath("images/component/filter/hover.svg"),
+      Disable = Common.HandlePath("images/component/filter/disable.svg")
+    }
+  };
 
+  private string DropdownClass
+  {
+    get
+    {
+      var dropdownClass = "dropdown-select";
+      dropdownClass += $" dropdown-select--{Size}";
+      dropdownClass += $" dropdown-select--{Mode}";
+      dropdownClass += $" dropdown-select--{(Multiple ? "multiple" : "single")}";
+      if (Disable) dropdownClass += " dropdown-select__disabled";
+      if (Readonly) dropdownClass += " dropdown-select__readonly";
+      if (_isFocus) dropdownClass += " dropdown-select__focus";
+      else if (_isHover) dropdownClass += " dropdown-select__hover";
+      else if (IsError) dropdownClass += " dropdown-select__error";
+      else if (_hasContent) dropdownClass += " dropdown-select__has-content";
+      if (Is100) dropdownClass += " width-100";
+      return dropdownClass;
+    }
+  }
+  private List<string> CurrentValue
+  {
+    get => Value;
+    set
+    {
+      Value = value;
+      ValueChanged.InvokeAsync(value);
+      OnChange.InvokeAsync(value);
+      OnInput.InvokeAsync(value);
+    }
+  }
+  private string IconString => CurrentValue.Count > 0 ? Icon.SelectedString : Icon.UnselectedString;
+  private IconSrc IconObject => CurrentValue.Count > 0 ? Icon.SelectedObject : Icon.UnselectedObject;
+
+  private bool _isListMouseenter;
+  private bool _isFocus;
+  private bool _isHover;
+  private bool _hasContent;
+  private bool _isOpen;
+  private string _search = string.Empty;
+
+  private void Close()
+  {
+    _isFocus = false;
+    _isHover = true;
+    _search = string.Empty;
+    _isOpen = false;
+    _isListMouseenter = false;
+  }
+  private void Open()
+  {
+    _isFocus = true;
+    _isHover = false;
+    _isOpen = true;
+  }
+
+  private void Blur()
+  {
+    if (!_isListMouseenter)
+    {
+      Close();
+    }
+  }
+  private void ToggleClick()
+  {
+    if (Disable || Readonly) return;
+    if (_isOpen) Close();
+    else Open();
+  }
+  private void Mouseenter()
+  {
+    _isHover = true;
+  }
+  private void Mouseleave()
+  {
+    _isHover = false;
+  }
 }
