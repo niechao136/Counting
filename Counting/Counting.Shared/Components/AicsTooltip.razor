@@ -1,6 +1,7 @@
-<div class="tooltip">
+<div class="@TargetClass">
   <div
-    class="@TargetClass"
+    class="tooltip--target"
+    @ref="_target"
     @onclick="Click"
     @onblur="Blur"
     @onfocus="Focus"
@@ -10,8 +11,12 @@
   </div>
   @if (_show)
   {
-    <div class="tooltip--content">
-      @TooltipContent
+    <div class="tooltip--warp">
+      <div class="tooltip--background" @onclick="CloseBackdrop">
+        <div class="tooltip--content" style="@ContentStyle">
+          @TooltipContent
+        </div>
+      </div>
     </div>
   }
 </div>
@@ -22,8 +27,74 @@
   [Parameter] public string Placement { get; set; } = TooltipPlacement.Top;
   [Parameter] public string Trigger { get; set; } = TooltipTrigger.Mouseenter;
 
-  private string TargetClass => $"tooltip--target {Placement}";
+  private string TargetClass => $"tooltip {Placement}";
+  private string ContentStyle
+  {
+    get
+    {
+      var style = string.Empty;
+      var top0 = $"top: calc({_targetRect.Top - 8}px - 100%);";
+      var top1 = $"top: calc({_targetRect.Bottom}px - 100%);";
+      var top2 = $"top: calc({_targetRect.Top + _targetRect.Height * 0.5}px - 50%);";
+      var top3 = $"top: calc({_targetRect.Top}px);";
+      var top4 = $"top: calc({_targetRect.Bottom + 8}px);";
+      var left0 = $"left: calc({_targetRect.Left - 8}px - 100%);";
+      var left1 = $"left: calc({_targetRect.Right}px - 100%);";
+      var left2 = $"left: calc({_targetRect.Left + _targetRect.Width * 0.5}px - 50%);";
+      var left3 = $"left: calc({_targetRect.Left}px);";
+      var left4 = $"left: calc({_targetRect.Right + 8}px);";
+      switch (Placement)
+      {
+        case TooltipPlacement.Top:
+          style += $"{top0}{left2}";
+          break;
+        case TooltipPlacement.TopStart:
+          style += $"{top0}{left3}";
+          break;
+        case TooltipPlacement.TopEnd:
+          style += $"{top0}{left1}";
+          break;
+        case TooltipPlacement.Bottom:
+          style += $"{top4}{left2}";
+          break;
+        case TooltipPlacement.BottomStart:
+          style += $"{top4}{left3}";
+          break;
+        case TooltipPlacement.BottomEnd:
+          style += $"{top4}{left1}";
+          break;
+        case TooltipPlacement.Left:
+          style += $"{top2}{left0}";
+          break;
+        case TooltipPlacement.LeftStart:
+          style += $"{top3}{left0}";
+          break;
+        case TooltipPlacement.LeftEnd:
+          style += $"{top1}{left0}";
+          break;
+        case TooltipPlacement.Right:
+          style += $"{top2}{left4}";
+          break;
+        case TooltipPlacement.RightStart:
+          style += $"{top3}{left4}";
+          break;
+        case TooltipPlacement.RightEnd:
+          style += $"{top1}{left4}";
+          break;
+      }
+      return style;
+    }
+  }
   private bool _show;
+  private ElementReference _target;
+  private DomRect _targetRect = new();
+
+  private DotNetObjectReference<AicsTooltip>? _reference;
+  [JSInvokable]
+  public void GetRect(DomRect rect)
+  {
+    _targetRect = rect;
+  }
 
   private void Click()
   {
@@ -60,4 +131,23 @@
       _show = false;
     }
   }
+  private void CloseBackdrop()
+  {
+    if (Trigger == TooltipTrigger.Click)
+    {
+      _show = false;
+    }
+  }
+
+
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (Common.IsClient(JsRuntime))
+    {
+      _reference ??= DotNetObjectReference.Create(this);
+      await JsRuntime.InvokeVoidAsync("window.AicsCommon.GetElement", _reference, _target, "GetRect");
+    }
+  }
+
 }

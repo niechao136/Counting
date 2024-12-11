@@ -155,7 +155,7 @@
     if (firstRender && Common.IsClient(JsRuntime))
     {
       _reference ??= DotNetObjectReference.Create(this);
-      await JsRuntime.InvokeVoidAsync("window.AicsLogin.AddWindowListener", _reference);
+      await JsRuntime.InvokeVoidAsync("window.AicsLogin.AddWindowListener", _reference, "EnterKeyup");
     }
   }
   public async ValueTask DisposeAsync()
