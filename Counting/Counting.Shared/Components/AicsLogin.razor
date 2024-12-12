@@ -29,7 +29,7 @@
               IsError="@IsError"/>
           }
         </div>
-        <div class="login--content__input-divider"></div>
+        <AicsDivider/>
         <div class="login--content__input-box">
           <AicsInputPassword
             @bind-Value="Password"
@@ -77,7 +77,7 @@
     <div class="login--footer__content">
       <div class="login--footer__content--line1">
         <div class="text">@Footer.WebVersion</div>
-        <div class="divider"></div>
+        <AicsDivider IsVertical="@true"/>
         <div class="text">@Footer.ServerVersion</div>
       </div>
       <div class="login--footer__content--line2">

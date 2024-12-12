@@ -25,8 +25,43 @@
 }
 .tooltip--content {
   position: absolute;
-  padding: 8px;
+  max-width: 240px !important;
+  background-color: var(--tooltip-background-color);
+  font-size: var(--tooltip-font-size);
+  color: var(--tooltip-font-color);
+  padding: var(--tooltip-padding-top) var(--tooltip-padding-right) var(--tooltip-padding-bottom) var(--tooltip-padding-left);
   border-radius: 4px;
-  background-color: #474747;
-  min-width: 100px;
+  font-weight: 400;
+  overflow: auto;
+  word-wrap: break-word;
+  text-align: unset;
+  box-sizing: border-box;
+}
+.tooltip--content::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.tooltip--content::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-background-color-track);
+  border-radius: 4px;
+}
+.tooltip--content::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-background-color-thumb);
+  border-radius: 4px;
+}
+.tooltip--content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-background-color-thumb_hover);
+}
+.tooltip-body .tooltip--title {
+  display: flex;
+  align-items: flex-end;
+  height: var(--tooltip-title-height);
+  line-height: var(--tooltip-title-line-height);
+  color: var(--tooltip-title-color);
+  font-weight: 700;
+  font-size: var(--tooltip-title-font-size);
+}
+.tooltip-body ::deep .divider {
+  margin-top: 4px;
+  margin-bottom: 4px;
 }

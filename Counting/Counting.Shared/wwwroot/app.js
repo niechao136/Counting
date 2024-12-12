@@ -23,14 +23,11 @@ window.AicsCommon = {
    * @param func
    */
   GetElement(obj, element, func) {
-    const ele = element.getBoundingClientRect()
-    console.log(ele)
+    const ele = !!element && !!element.getBoundingClientRect ? element.getBoundingClientRect() : {}
     const rect = {
-      ...(ele || {}),
       windowWidth: innerWidth || document.documentElement.clientWidth,
       windowHeight: innerHeight || document.documentElement.clientHeight,
     }
-    console.log(ele, rect)
-    obj.invokeMethodAsync(func, rect)
+    obj.invokeMethodAsync(func, Object.assign(ele, rect))
   }
 }
