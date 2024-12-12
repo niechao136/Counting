@@ -14,10 +14,27 @@
           BeforeObject="@IconObject"/>
       </div>
     }
-    <div class="dropdown-select--tags-content">
+    else
+    {
+      <div class="dropdown-select--tags-content">
+        @if (_hasContent)
+        {
 
-    </div>
+        }
+        else
+        {
+          <div>@Placeholder</div>
+        }
+      </div>
+      <div class="dropdown-select--tags-icon"></div>
+    }
   </div>
+  @if (!string.IsNullOrEmpty(ErrorMessage) && !Disable && !Readonly && IsError)
+  {
+    <div class="input-text--error-message">
+      <div class="input-text--error-message__content">@ErrorMessage</div>
+    </div>
+  }
 </div>
 
 @code {

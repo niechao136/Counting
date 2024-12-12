@@ -9,7 +9,7 @@
     @onmouseleave="Mouseleave">
     @TooltipTarget
   </div>
-  @if (_show)
+  @if (_show && Show)
   {
     <div class="tooltip--warp">
       <div class="tooltip--background" @onclick="CloseBackdrop">
@@ -47,6 +47,7 @@
   [Parameter] public int OffsetY { get; set; }
   [Parameter] public int MaxWidth { get; set; }
   [Parameter] public bool Interactive { get; set; }
+  [Parameter] public bool Show { get; set; } = true;
 
   private string TargetClass => $"tooltip {Placement}";
   private string ContentClass => $"tooltip--content {CustomClass}";
@@ -55,16 +56,16 @@
     get
     {
       var style = string.Empty;
-      var top0 = $"top: calc({_targetRect.Top - 8 - _contentRect.Height + OffsetY}px);";
-      var top1 = $"top: calc({_targetRect.Bottom - _contentRect.Height + OffsetY}px);";
-      var top2 = $"top: calc({_targetRect.Top + _targetRect.Height * 0.5  - _contentRect.Height * 0.5 + OffsetY}px);";
-      var top3 = $"top: calc({_targetRect.Top + OffsetY}px);";
-      var top4 = $"top: calc({_targetRect.Bottom + 8 + OffsetY}px);";
-      var left0 = $"left: calc({_targetRect.Left - 8 - _contentRect.Width + OffsetX}px);";
-      var left1 = $"left: calc({_targetRect.Right - _contentRect.Width + OffsetX}px);";
-      var left2 = $"left: calc({_targetRect.Left + _targetRect.Width * 0.5 - _contentRect.Width * 0.5 + OffsetX}px);";
-      var left3 = $"left: calc({_targetRect.Left + OffsetX}px);";
-      var left4 = $"left: calc({_targetRect.Right + 8 + OffsetX}px);";
+      var top0 = $"top: calc({_rects[0].Top - 8 - _rects[1].Height + OffsetY}px);";
+      var top1 = $"top: calc({_rects[0].Bottom - _rects[1].Height + OffsetY}px);";
+      var top2 = $"top: calc({_rects[0].Top + _rects[0].Height * 0.5  - _rects[1].Height * 0.5 + OffsetY}px);";
+      var top3 = $"top: calc({_rects[0].Top + OffsetY}px);";
+      var top4 = $"top: calc({_rects[0].Bottom + 8 + OffsetY}px);";
+      var left0 = $"left: calc({_rects[0].Left - 8 - _rects[1].Width + OffsetX}px);";
+      var left1 = $"left: calc({_rects[0].Right - _rects[1].Width + OffsetX}px);";
+      var left2 = $"left: calc({_rects[0].Left + _rects[0].Width * 0.5 - _rects[1].Width * 0.5 + OffsetX}px);";
+      var left3 = $"left: calc({_rects[0].Left + OffsetX}px);";
+      var left4 = $"left: calc({_rects[0].Right + 8 + OffsetX}px);";
       switch (Placement)
       {
         case TooltipPlacement.Top:
@@ -112,20 +113,14 @@
   private string BodyStyle => string.IsNullOrEmpty(Width) ? "" : $"width: {Width};";
   private bool _show;
   private ElementReference _target;
-  private DomRect _targetRect = new();
   private ElementReference _content;
-  private DomRect _contentRect = new();
+  private List<DomRect> _rects = [new(), new()];
 
   private DotNetObjectReference<AicsTooltip>? _reference;
   [JSInvokable]
-  public void GetTargetRect(DomRect rect)
+  public void GetRect(DomRect rect, int index)
   {
-    _targetRect = rect;
-  }
-  [JSInvokable]
-  public void GetContentRect(DomRect rect)
-  {
-    _contentRect = rect;
+    _rects[index] = rect;
   }
 
   private void Click()
@@ -185,8 +180,8 @@
     if (Common.IsClient(JsRuntime))
     {
       _reference ??= DotNetObjectReference.Create(this);
-      await JsRuntime.InvokeVoidAsync("window.AicsCommon.GetElement", _reference, _target, "GetTargetRect");
-      await JsRuntime.InvokeVoidAsync("window.AicsCommon.GetElement", _reference, _content, "GetContentRect");
+      await JsRuntime.InvokeVoidAsync("window.AicsCommon.GetElement", _reference, _target, "GetRect", 0);
+      await JsRuntime.InvokeVoidAsync("window.AicsCommon.GetElement", _reference, _content, "GetRect", 1);
     }
   }
 

@@ -21,13 +21,14 @@ window.AicsCommon = {
    * @param obj
    * @param element {HTMLElement}
    * @param func
+   * @param index {Number}
    */
-  GetElement(obj, element, func) {
+  GetElement(obj, element, func, index = 0) {
     const ele = !!element && !!element.getBoundingClientRect ? element.getBoundingClientRect() : {}
     const rect = {
       windowWidth: innerWidth || document.documentElement.clientWidth,
       windowHeight: innerHeight || document.documentElement.clientHeight,
     }
-    obj.invokeMethodAsync(func, Object.assign(ele, rect))
+    obj.invokeMethodAsync(func, Object.assign(ele, rect), index)
   }
 }

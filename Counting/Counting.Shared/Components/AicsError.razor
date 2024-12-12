@@ -1,0 +1,19 @@
+@if (Show)
+{
+  <div class="error">
+    <AicsTooltip>
+      <TooltipTarget>
+        <div class="error__content">@Message</div>
+      </TooltipTarget>
+      <TooltipContent>@Message</TooltipContent>
+    </AicsTooltip>
+  </div>
+}
+
+
+@code {
+
+  [Parameter] public string Message { get; set; } = string.Empty;
+  [Parameter] public bool Show { get; set; }
+
+}
