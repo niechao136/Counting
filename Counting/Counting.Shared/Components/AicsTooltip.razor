@@ -6,31 +6,53 @@
     @onblur="Blur"
     @onfocus="Focus"
     @onmouseenter="Mouseenter"
-    @onmouseleave="Mouseleave">
+    @onmouseleave="Mouseleave"
+    @onmouseenter:stopPropagation
+    @onmouseleave:stopPropagation>
     @TooltipTarget
   </div>
-  @if (_show && Show)
+  @if (ShowBody)
   {
-    <div class="tooltip--warp">
-      <div class="tooltip--background" @onclick="CloseBackdrop">
-        <div
-          @ref="_content"
-          class="@ContentClass"
-          style="@ContentStyle"
-          @onclick="ClickContent"
-          @onclick:preventDefault>
-          <div class="tooltip-body" style="@BodyStyle">
-            @TooltipBefore
-            @if (!string.IsNullOrEmpty(Title))
-            {
-              <div class="tooltip--title">@Title</div>
-              <AicsDivider/>
-            }
-            @TooltipContent
+    @if (Trigger == TooltipTrigger.Click)
+    {
+      <div class="tooltip--warp">
+        <div class="tooltip--background" @onclick="CloseBackdrop">
+          <div
+            @ref="_content"
+            class="@ContentClass"
+            style="@ContentStyle"
+            @onclick="ClickContent"
+            @onclick:preventDefault>
+            <div class="tooltip-body" style="@BodyStyle">
+              @TooltipBefore
+              @if (!string.IsNullOrEmpty(Title))
+              {
+                <div class="tooltip--title">@Title</div>
+                <AicsDivider/>
+              }
+              @TooltipContent
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    }
+    else
+    {
+      <div
+        @ref="_content"
+        class="@ContentClass"
+        style="@ContentStyle">
+        <div class="tooltip-body" style="@BodyStyle">
+          @TooltipBefore
+          @if (!string.IsNullOrEmpty(Title))
+          {
+            <div class="tooltip--title">@Title</div>
+            <AicsDivider/>
+          }
+          @TooltipContent
+        </div>
+      </div>
+    }
   }
 </div>
 
@@ -38,14 +60,13 @@
   [Parameter] public RenderFragment? TooltipTarget { get; set; }
   [Parameter] public RenderFragment? TooltipContent { get; set; }
   [Parameter] public RenderFragment? TooltipBefore { get; set; }
-  [Parameter] public string Placement { get; set; } = TooltipPlacement.Top;
+  [Parameter] public string Placement { get; set; } = TooltipPlacement.Bottom;
   [Parameter] public string Trigger { get; set; } = TooltipTrigger.Mouseenter;
   [Parameter] public string Title { get; set; } = string.Empty;
   [Parameter] public string Width { get; set; } = string.Empty;
   [Parameter] public string CustomClass { get; set; } = string.Empty;
   [Parameter] public int OffsetX { get; set; }
   [Parameter] public int OffsetY { get; set; }
-  [Parameter] public int MaxWidth { get; set; }
   [Parameter] public bool Interactive { get; set; }
   [Parameter] public bool Show { get; set; } = true;
 
@@ -56,16 +77,18 @@
     get
     {
       var style = string.Empty;
-      var top0 = $"top: calc({_rects[0].Top - 8 - _rects[1].Height + OffsetY}px);";
-      var top1 = $"top: calc({_rects[0].Bottom - _rects[1].Height + OffsetY}px);";
-      var top2 = $"top: calc({_rects[0].Top + _rects[0].Height * 0.5  - _rects[1].Height * 0.5 + OffsetY}px);";
-      var top3 = $"top: calc({_rects[0].Top + OffsetY}px);";
-      var top4 = $"top: calc({_rects[0].Bottom + 8 + OffsetY}px);";
-      var left0 = $"left: calc({_rects[0].Left - 8 - _rects[1].Width + OffsetX}px);";
-      var left1 = $"left: calc({_rects[0].Right - _rects[1].Width + OffsetX}px);";
-      var left2 = $"left: calc({_rects[0].Left + _rects[0].Width * 0.5 - _rects[1].Width * 0.5 + OffsetX}px);";
-      var left3 = $"left: calc({_rects[0].Left + OffsetX}px);";
-      var left4 = $"left: calc({_rects[0].Right + 8 + OffsetX}px);";
+      var top = Trigger == TooltipTrigger.Click ? _rects[0].Top + OffsetY : OffsetY;
+      var top0 = $"top: calc({top - 8 - _rects[1].Height}px);";
+      var top1 = $"top: calc({top + _rects[0].Height - _rects[1].Height}px);";
+      var top2 = $"top: calc({top + _rects[0].Height * 0.5  - _rects[1].Height * 0.5}px);";
+      var top3 = $"top: calc({top}px);";
+      var top4 = $"top: calc({top + _rects[0].Height + 8}px);";
+      var left = Trigger == TooltipTrigger.Click ? _rects[0].Left + OffsetX : OffsetX;
+      var left0 = $"left: calc({left - 8 - _rects[1].Width}px);";
+      var left1 = $"left: calc({left + _rects[0].Width - _rects[1].Width}px);";
+      var left2 = $"left: calc({left + _rects[0].Width * 0.5 - _rects[1].Width * 0.5}px);";
+      var left3 = $"left: calc({left}px);";
+      var left4 = $"left: calc({left + _rects[0].Width + 8}px);";
       switch (Placement)
       {
         case TooltipPlacement.Top:
@@ -105,12 +128,14 @@
           style += $"{top1}{left4}";
           break;
       }
-      var max = MaxWidth > 0 ? MaxWidth : 240;
+      double.TryParse(Width, out var width);
+      var max = width > 0 ? width : 350;
       style += $"max-width: {max}px;";
       return style;
     }
   }
   private string BodyStyle => string.IsNullOrEmpty(Width) ? "" : $"width: {Width};";
+  private bool ShowBody => Show && _show;
   private bool _show;
   private ElementReference _target;
   private ElementReference _content;

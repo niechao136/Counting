@@ -38,11 +38,9 @@
             IsError="@IsError"/>
         </div>
       </div>
-      <div class="login--content__input-error-message">
-        <div class="login--content__input-error-message__content">
-          @Form.ErrorMessage
-        </div>
-      </div>
+      <AicsError
+        Show="@(!string.IsNullOrEmpty(Form.ErrorMessage))"
+        Message="@Form.ErrorMessage" />
     </div>
     @if (!ChangePassword)
     {

@@ -30,12 +30,9 @@
       AfterString="@AfterString"
       OnClick="IconClick"/>
   }
-  @if (!string.IsNullOrEmpty(ErrorMessage) && !Disable && !Readonly && IsError)
-  {
-    <div class="input-text--error-message">
-      <div class="input-text--error-message__content">@ErrorMessage</div>
-    </div>
-  }
+  <AicsError
+    Show="@ShowError"
+    Message="@ErrorMessage"/>
 </div>
 
 @code {
@@ -77,6 +74,7 @@
   }
   private bool IsDisabled => Disable || Readonly;
   private bool ShowIcon => !string.IsNullOrEmpty(AfterString) || !string.IsNullOrEmpty(AfterObject.Normal);
+  private bool ShowError => !string.IsNullOrEmpty(ErrorMessage) && !Disable && !Readonly && IsError;
   private string InputClass
   {
     get

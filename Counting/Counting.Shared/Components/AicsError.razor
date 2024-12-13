@@ -1,9 +1,9 @@
 @if (Show)
 {
   <div class="error">
-    <AicsTooltip>
+    <AicsTooltip Show="@_show" Placement="@TooltipPlacement.BottomStart">
       <TooltipTarget>
-        <div class="error__content">@Message</div>
+        <div @ref="_content" class="error__content">@Message</div>
       </TooltipTarget>
       <TooltipContent>@Message</TooltipContent>
     </AicsTooltip>
@@ -15,5 +15,26 @@
 
   [Parameter] public string Message { get; set; } = string.Empty;
   [Parameter] public bool Show { get; set; }
+
+  private bool _show;
+  private ElementReference _content;
+  private DotNetObjectReference<AicsError>? _reference;
+
+  [JSInvokable]
+  public void IsTextOverflow(bool isTextOverflow, int index)
+  {
+    if (_show == isTextOverflow) return;
+    _show = isTextOverflow;
+    StateHasChanged();
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (Common.IsClient(JsRuntime))
+    {
+      _reference ??= DotNetObjectReference.Create(this);
+      await JsRuntime.InvokeVoidAsync("window.AicsCommon.IsTextOverflow", _reference, _content, "IsTextOverflow");
+    }
+  }
 
 }

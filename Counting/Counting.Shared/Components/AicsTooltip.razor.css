@@ -36,6 +36,7 @@
   word-wrap: break-word;
   text-align: unset;
   box-sizing: border-box;
+  z-index: 999;
 }
 .tooltip--content::-webkit-scrollbar {
   width: 4px;

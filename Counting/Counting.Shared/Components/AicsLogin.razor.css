@@ -62,20 +62,8 @@
   border: none !important;
   background-color: transparent !important;
 }
-.login--content__input-error-message {
-  width: inherit;
-  height: var(--input-error-message-height);
-  line-height: var(--input-error-message-height);
-  font-size: 12px;
+.login--content__input ::deep .error {
   padding-left: 17px;
-  box-sizing: border-box;
-  color: var(--input-grayscale-primary_error);
-  position: relative;
-}
-.login--content__input-error-message__content {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .login--content__action {
   height: 24px;

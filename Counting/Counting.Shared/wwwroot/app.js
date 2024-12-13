@@ -18,6 +18,7 @@ window.AicsLogin = {
 };
 window.AicsCommon = {
   /**
+   * 获取元素位置信息
    * @param obj
    * @param element {HTMLElement}
    * @param func
@@ -30,5 +31,19 @@ window.AicsCommon = {
       windowHeight: innerHeight || document.documentElement.clientHeight,
     }
     obj.invokeMethodAsync(func, Object.assign(ele, rect), index)
-  }
+  },
+  /**
+   * 判断文本是否溢出
+   * @param obj
+   * @param element {HTMLElement}
+   * @param func
+   * @param index {Number}
+   */
+  IsTextOverflow(obj, element, func, index = 0) {
+    let is_text_overflow = false
+    if (!!element && element.clientWidth !== 0) {
+      is_text_overflow = element.scrollWidth > element.clientWidth
+    }
+    obj.invokeMethodAsync(func, is_text_overflow, index)
+  },
 }
