@@ -1,0 +1,109 @@
+﻿.nav-item ::deep .menu-item {
+  height: var(--layout-nav-expand-link-height);
+  font-size: var(--layout-nav-expand-link-font-size);
+  font-weight: 400;
+  padding: 0 24px;
+  color: var(--layout-nav-color_normal);
+  background-color: var(--layout-nav-background-color_normal);
+  box-shadow: none;
+  cursor: pointer;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  line-height: 30px;
+  text-decoration: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: 20;
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
+}
+.menu-item--icon {
+  margin: 0;
+  width: var(--layout-nav-expand-link-icon-width);
+  height: var(--layout-nav-expand-link-icon-height);
+  background-color: var(--layout-nav-color_normal);
+
+  mask-size: var(--layout-nav-expand-link-icon-width) var(--layout-nav-expand-link-icon-height);
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+.menu-item--text {
+  height: 16px;
+  line-height: 16px;
+  margin-left: 16px;
+  overflow: hidden;
+  width: calc(var(--layout-nav-expand-link-title-width) - 16px - 16px);
+  margin-right: 16px;
+}
+.menu-item--arrow {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  position: relative;
+  transform: rotate(0);
+}
+.menu-item--arrow:before {
+  content: '';
+  width: 1px;
+  height: 6px;
+  background-color: var(--layout-nav-color_normal);
+  position: absolute;
+  left: 10.5px;
+  top: 5px;
+
+  border-radius: 1px;
+
+  transform: rotate(55deg);
+}
+.menu-item--arrow:after {
+  content: '';
+  width: 1px;
+  height: 6px;
+  background-color: var(--layout-nav-color_normal);
+  position: absolute;
+  left: 5.5px;
+  top: 5px;
+
+  border-radius: 1px;
+
+  transform: rotate(-55deg);
+}
+.menu-item--arrow.open:before {
+  transform: rotate(125deg);
+}
+.menu-item--arrow.open:after {
+  transform: rotate(-125deg);
+}
+.nav-item ::deep .menu-item:hover {
+  color: var(--layout-nav-color_hover) !important;
+  background-color: var(--layout-nav-background-color_hover) !important;
+}
+.nav-item ::deep .menu-item:hover .menu-item--icon {
+  background-color: var(--layout-nav-color_hover) !important;
+}
+.nav-item ::deep .menu-item:hover .menu-item--arrow.open:before {
+  background-color: var(--layout-nav-color_hover) !important;
+}
+.nav-item ::deep .menu-item:hover .menu-item--arrow.open:after {
+  background-color: var(--layout-nav-color_hover) !important;
+}
+.nav-item ::deep .menu-item:active {
+  color: var(--layout-nav-color-router_active) !important;
+  background-color: var(--layout-nav-background-color-router_active) !important;
+}
+.nav-item ::deep .menu-item:active .menu-item--icon {
+  background-color: var(--layout-nav-color-router_active) !important;
+}
+.nav-item ::deep .menu-item:active .menu-item--arrow.open:before {
+  background-color: var(--layout-nav-color-router_active) !important;
+}
+.nav-item ::deep .menu-item:active .menu-item--arrow.open:after {
+  background-color: var(--layout-nav-color-router_active) !important;
+}

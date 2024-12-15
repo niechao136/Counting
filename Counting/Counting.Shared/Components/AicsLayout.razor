@@ -1,15 +1,26 @@
-<div class="aics-layout">
-  <aside></aside>
+<div class="@LayoutClass">
+  @if (_showSide)
+  {
+    <aside>
+      <AicsLayoutNav
+        IsExpand="@_isExpand"
+        NavList="NavList"
+        OnToggle="() => _isExpand = !_isExpand"/>
+    </aside>
+  }
   <main>
     <header class="header">
-      <div class="header--nav">
-        <AicsButton
-          Type="@ButtonType.OnStrong"
-          Mode="@ButtonMode.Text"
-          BeforeString="@Common.HandlePath("images/component/layout/menu.svg")"
-          OnClick="MenuClick"/>
-      </div>
-      @if (ShowBack)
+      @if (!_showSide)
+      {
+        <div class="header--nav">
+          <AicsButton
+            Type="@ButtonType.OnStrong"
+            Mode="@ButtonMode.Text"
+            BeforeString="@Common.HandlePath("images/component/layout/menu.svg")"
+            OnClick="MenuClick"/>
+        </div>
+      }
+      @if (ShowBack && _showSide)
       {
         <div class="header--back">
           <AicsButton
@@ -21,7 +32,7 @@
         </div>
       }
       <div class="@TitleClass">
-        @if (Breadcrumbs.Count > 0)
+        @if (Breadcrumbs.Count > 0 && _showSide)
         {
           <div class="header--title--breadcrumb">
             @for (var i = 0; i < Breadcrumbs.Count; i++)
@@ -45,12 +56,18 @@
         @HeaderSlot
       </div>
     </header>
-    <div class="body"></div>
+    <div class="body">
+      @BodySlot
+    </div>
   </main>
   <div class="@NavHiddenClass">
     <div class="nav-hidden--background" @onclick="CloseBackdrop">
-      <div class="nav-hidden--main">
-
+      <div class="nav-hidden--main" @onclick:stopPropagation>
+        <AicsLayoutNav
+          IsExpand="@_isExpand"
+          NavList="NavList"
+          ItemClick="CloseBackdrop"
+          OnToggle="() => _showMenu = !_showMenu"/>
       </div>
     </div>
   </div>
@@ -63,11 +80,63 @@
   [Parameter] public EventCallback<(MouseEventArgs, int, HeaderBreadcrumb)> BreadcrumbClick { get; set; }
   [Parameter] public string Title { get; set; } = "Page Title";
   [Parameter] public RenderFragment? HeaderSlot { get; set; }
+  [Parameter] public RenderFragment? BodySlot { get; set; }
+  [Parameter] public List<NavSub> NavList { get; set; } = [];
 
-  private string TitleClass => $"header--title{(Breadcrumbs.Count > 0 ? " header--title--with-breadcrumb" : "")}";
+  private string LayoutClass => $"layout {(_showSide ? _isExpand ? "nav-open" : "nav-close" : "no-side")}";
+  private string TitleClass => $"header--title{(Breadcrumbs.Count > 0 ? " with-breadcrumb" : "")}";
   private string NavHiddenClass => $"nav-hidden{(_showMenu ? " display-black" : " display-none")}";
 
   private bool _showMenu;
+  private bool _showSide = true;
+  private bool _isExpand = true;
+  private DotNetObjectReference<AicsLayout>? _reference;
+
+  [JSInvokable]
+  public void GetWindowWidth(int width)
+  {
+    var change = false;
+    switch (width)
+    {
+      case > 1366:
+        if (!_showSide)
+        {
+          _showSide = true;
+          change = true;
+        }
+        if (!_isExpand)
+        {
+          _isExpand = true;
+          change = true;
+        }
+        break;
+      case > 767:
+        if (!_showSide)
+        {
+          _showSide = true;
+          change = true;
+        }
+        if (_isExpand)
+        {
+          _isExpand = false;
+          change = true;
+        }
+        break;
+      case <= 767:
+        if (_showSide)
+        {
+          _showSide = false;
+          change = true;
+        }
+        if (!_isExpand)
+        {
+          _isExpand = true;
+          change = true;
+        }
+        break;
+    }
+    if (change) StateHasChanged();
+  }
 
   private void MenuClick()
   {
@@ -76,5 +145,14 @@
   private void CloseBackdrop()
   {
     _showMenu = false;
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (Common.IsClient(JsRuntime) && firstRender)
+    {
+      _reference ??= DotNetObjectReference.Create(this);
+      await JsRuntime.InvokeVoidAsync("window.AicsCommon.GetWindowWidth", _reference, "GetWindowWidth");
+    }
   }
 }

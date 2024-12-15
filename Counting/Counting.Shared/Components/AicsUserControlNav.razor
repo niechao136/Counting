@@ -1,0 +1,77 @@
+﻿<div class="user-control-nav">
+  <AicsTooltip
+    Placement="@TooltipPlacement.BottomStart"
+    Trigger="@TooltipTrigger.Click"
+    Interactive="@true">
+    <TooltipTarget>
+      <div class="@HeaderClass">
+        <div class="header__abbreviation">@Abbreviation</div>
+        @if (ShowName)
+        {
+          <div class="header--info">
+            <AicsError Message="@Name" Show="@true"/>
+            @if (!string.IsNullOrEmpty(Rule))
+            {
+              <div class="header--info__rule">
+                @Rule
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </TooltipTarget>
+    <TooltipContent>
+      <div class="@HeaderClass">
+        <div class="header__abbreviation">@Abbreviation</div>
+        @if (ShowName)
+        {
+          <div class="header--info">
+            <AicsError Message="@Name" Show="@true"/>
+            @if (!string.IsNullOrEmpty(Rule))
+            {
+              <div class="header--info__rule">
+                @Rule
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <div class="user-control-nav--action">
+        @for (var index = 0; index < Actions.Count; index++)
+        {
+          var action = Actions[index];
+          <div>
+
+          </div>
+        }
+      </div>
+    </TooltipContent>
+  </AicsTooltip>
+</div>
+
+@code {
+
+  [Parameter] public string Name { get; set; } = "User Name";
+  [Parameter] public string Rule { get; set; } = string.Empty;
+  [Parameter] public bool ShowName { get; set; } = true;
+  [Parameter] public List<UserAction> Actions { get; set; } = [];
+  [Parameter] public UserFooter Footer { get; set; } = new();
+
+  private string HeaderClass
+  {
+    get
+    {
+      var header = "user-control-nav--header";
+      if (_headerHover) header += " header__hover";
+      else if (_headerActive) header += " header__active";
+      if (!ShowName) header += " without-name";
+      return header;
+    }
+  }
+  private string Abbreviation => Common.Abbreviation(Name);
+
+  private bool _headerActive;
+  private bool _headerHover;
+  private bool _headerMouseEnter;
+
+}

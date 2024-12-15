@@ -46,9 +46,36 @@
               @bind-Value="_search"
               Size="@InputSize.Small"
               Placeholder="@SearchPlaceholder"/>
+            <AicsDivider Class="search-divider"/>
           </div>
         }
       </div>
+      <ul class="dropdown-select--content-wrapper--content">
+        @if (ShowAll && Multiple)
+        {
+          <li class=""></li>
+        }
+        @if (!Multiple || Max > 0)
+        {
+
+        }
+        @if (Multiple || Max > 0)
+        {
+
+        }
+        @if (Multiple && !string.IsNullOrEmpty(_search))
+        {
+          <li class="dropdown-select--content-wrapper--option">
+            <span>@Text.NoResult</span>
+          </li>
+        }
+        @if (Multiple && string.IsNullOrEmpty(_search))
+        {
+          <li class="dropdown-select--content-wrapper--option">
+            <span>@Text.NoOption</span>
+          </li>
+        }
+      </ul>
     </div>
   }
 </div>
@@ -75,7 +102,7 @@
   [Parameter] public bool AllowEmpty { get; set; } = true;
   [Parameter] public bool CloseOnSelect { get; set; } = true;
   [Parameter] public DropdownText Text { get; set; } = new();
-  [Parameter] public DropdownIcon Icon { get; set; } = new DropdownIcon
+  [Parameter] public DropdownIcon Icon { get; set; } = new()
   {
     SelectedObject = new IconSrc
     {

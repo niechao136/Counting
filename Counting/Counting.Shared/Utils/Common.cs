@@ -8,6 +8,11 @@ public static class Common
 {
   public static string HandlePath(string path) => $"/_content/Counting.Shared/{path}";
 
+  public static string GetIcon(string path)
+  {
+    return $"mask-image:url({path});-webkit-mask-image:url({path});";
+  }
+
   public static bool IsClient(IJSRuntime jsRuntime) =>
     jsRuntime.GetType().ToString().Contains("DefaultWebAssemblyJSRuntime")
     || jsRuntime.GetType().ToString().Contains("WebViewJSRuntime");
@@ -16,6 +21,16 @@ public static class Common
     Convert.ToHexStringLower(Md5.ComputeHash(Encoding.UTF8.GetBytes(target)));
 
   public static readonly Regex EmailRegex = new(@"^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9_\-.]+.[a-zA-Z]{2,4}$");
+  public static readonly Regex EnglishRegex = new("[0-9a-zA-Z]");
+
+  public static string Abbreviation(string name)
+  {
+    var array = name.Split('.', ' ').Where(s => !string.IsNullOrEmpty(s.Trim())).ToList();
+    if (array.Count == 0) return string.Empty;
+    var result = array[0][..1];
+    if (EnglishRegex.IsMatch(array[0]) && !string.IsNullOrEmpty(array[1]) && EnglishRegex.IsMatch(array[1])) result += array[1][..1];
+    return result;
+  }
 }
 
 public static class Md5

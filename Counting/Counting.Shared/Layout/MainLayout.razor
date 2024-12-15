@@ -1,24 +1,163 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-  <div class="sidebar">
-    <NavMenu/>
-  </div>
-
-  <main>
-    <div class="top-row px-4">
-      <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-    </div>
-
-    <article class="content px-4">
-      @Body
-      <BaseLayout/>
-    </article>
-  </main>
-</div>
+<AicsLayout Breadcrumbs="@_breadcrumbs" NavList="@_nav">
+  <BodySlot>
+    @Body
+    <BaseLayout/>
+  </BodySlot>
+</AicsLayout>
 
 <div id="blazor-error-ui" data-nosnippet>
   An unhandled error has occurred.
   <a href="." class="reload">Reload</a>
   <span class="dismiss">🗙</span>
 </div>
+
+@code
+{
+  private readonly List<HeaderBreadcrumb> _breadcrumbs = [
+    new()
+    {
+      Text = "Breadcrumb1"
+    },
+    new()
+    {
+      Text = "Breadcrumb2"
+    }
+  ];
+
+  private readonly List<NavSub> _nav = [
+    new()
+    {
+      Title = "Overview",
+      Href = "/Overview",
+      Icon = Common.HandlePath("images/nav/overview.svg")
+    },
+    new()
+    {
+      Title = "Notify",
+      Href = "/Notify",
+      Icon = Common.HandlePath("images/nav/event.svg")
+    },
+    new()
+    {
+      Title = "Cross Sites",
+      Icon = Common.HandlePath("images/nav/cross-store.svg"),
+      Children = [
+        new NavBase
+        {
+          Title = "Ranking",
+          Href = "/Ranking",
+        },
+        new NavBase
+        {
+          Title = "Data Analysis",
+          Href = "/Cross",
+        },
+      ]
+    },
+    new()
+    {
+      Title = "Single Site",
+      Icon = Common.HandlePath("images/nav/store-analysis.svg"),
+      Children = [
+        new NavBase
+        {
+          Title = "KPI Review",
+          Href = "/Kpi",
+        },
+        new NavBase
+        {
+          Title = "Data Analysis",
+          Href = "/Single",
+        },
+      ]
+    },
+    new()
+    {
+      Title = "Queuing",
+      Icon = Common.HandlePath("images/nav/queuing.svg"),
+      Children = [
+        new NavBase
+        {
+          Title = "Real-time Status",
+          Href = "/RealTime",
+        },
+        new NavBase
+        {
+          Title = "Event",
+          Href = "/Event",
+        },
+        new NavBase
+        {
+          Title = "History Data",
+          Href = "/History",
+        },
+      ]
+    },
+    new()
+    {
+      Title = "Data Report",
+      Icon = Common.HandlePath("images/nav/data-report.svg"),
+      Children = [
+        new NavBase
+        {
+          Title = "Sales Report",
+          Href = "/Sales",
+        },
+        new NavBase
+        {
+          Title = "Traffic Report",
+          Href = "/Traffic",
+        },
+        new NavBase
+        {
+          Title = "Weekly Report",
+          Href = "/Weekly",
+        },
+      ]
+    },
+    new()
+    {
+      Title = "Setting",
+      Icon = Common.HandlePath("images/nav/setting.svg"),
+      Children = [
+        new NavBase
+        {
+          Title = "Counting Unit",
+          Href = "/Counting",
+        },
+        new NavBase
+        {
+          Title = "Queuing Unit",
+          Href = "/Queuing",
+        },
+        new NavBase
+        {
+          Title = "Queuing Rule",
+          Href = "/QueuingRule",
+        },
+        new NavBase
+        {
+          Title = "Schedule Rule",
+          Href = "/Schedule",
+        },
+        new NavBase
+        {
+          Title = "Alert Rule",
+          Href = "/AlertRule",
+        },
+        new NavBase
+        {
+          Title = "Notify",
+          Href = "/NotifyRule",
+        },
+        new NavBase
+        {
+          Title = "Weekly Report",
+          Href = "/Setting",
+        },
+      ]
+    },
+  ];
+}

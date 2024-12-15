@@ -46,4 +46,13 @@ window.AicsCommon = {
     }
     obj.invokeMethodAsync(func, is_text_overflow, index)
   },
+  /**
+   * 监听屏幕变化并返回屏幕宽度
+   */
+  GetWindowWidth(obj, func) {
+    window.onresize = function () {
+      obj.invokeMethodAsync(func, window.screen.width)
+    }
+    obj.invokeMethodAsync(func, window.screen.width)
+  },
 }

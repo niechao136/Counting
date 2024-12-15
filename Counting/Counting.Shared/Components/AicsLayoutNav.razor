@@ -1,5 +1,71 @@
-<h3>AicsLayoutNav</h3>
+<div class="@NavClass">
+  @if (IsExpand)
+  {
+    <div class="nav--logo nav--logo_open">
+      <div class="logo_box">
+        <a class="logo_box-img" href="@HomeHref">
+          <img src="@LogoImg" alt=""/>
+        </a>
+        <div class="logo_box-toggle" @onclick="OnToggle" @onclick:stopPropagation="@true">
+          <div class="toggle-img"></div>
+        </div>
+      </div>
+      @if (!string.IsNullOrEmpty(Subtitle))
+      {
+        <div class="nav--logo__subtitle">
+          @Subtitle
+        </div>
+      }
+    </div>
+  }
+  else
+  {
+    <div class="nav--logo nav--logo_close">
+      <div class="logo_box">
+        <a class="logo_box-img" href="@HomeHref">
+          <div class="home-img"></div>
+        </a>
+        <div class="logo_box-toggle" @onclick="OnToggle" @onclick:stopPropagation="@true">
+          <div class="toggle-img"></div>
+        </div>
+      </div>
+    </div>
+  }
+  <div class="menu">
+    @foreach (var sub in NavList)
+    {
+      @if (sub.Children.Count > 0)
+      {
+        <AicsNavItem Item="@sub" OnClick="ItemClick"/>
+      }
+      else
+      {
+        <NavLink class="menu-item" href="@sub.Href" @onclick="ItemClick">
+          <div class="menu-item--icon" style="@Common.GetIcon(sub.Icon)"></div>
+          <div class="menu-item--text">@sub.Title</div>
+        </NavLink>
+      }
+    }
+  </div>
+</div>
 
 @code {
-  
+
+  [Parameter] public bool IsExpand { get; set; } = true;
+  [Parameter] public string LogoImg { get; set; } = Common.HandlePath("images/component/layout/logo-nav.png");
+  [Parameter] public bool ShowBrand { get; set; } = true;
+  [Parameter] public string Subtitle { get; set; } = "Subtitle Name";
+  [Parameter] public string HomeHref { get; set; } = "/";
+  [Parameter] public EventCallback<MouseEventArgs> OnToggle { get; set; }
+  [Parameter] public string BrandId { get; set; } = "Brand Id";
+  [Parameter] public List<DropdownOption> BrandOption { get; set; } = [];
+  [Parameter] public List<NavSub> NavList { get; set; } = [];
+  [Parameter] public EventCallback<MouseEventArgs> ItemClick { get; set; }
+  [Parameter] public string UserName { get; set; } = "User Name";
+  [Parameter] public string UserRole { get; set; } = string.Empty;
+  [Parameter] public List<UserAction> UserActions { get; set; } = [];
+  [Parameter] public UserFooter UserFooter { get; set; } = new();
+
+  private string NavClass => $"nav nav--{(IsExpand ? "open" : "close")}";
+
 }
