@@ -62,6 +62,7 @@
   [Parameter] public RenderFragment? TooltipBefore { get; set; }
   [Parameter] public string Placement { get; set; } = TooltipPlacement.Bottom;
   [Parameter] public string Trigger { get; set; } = TooltipTrigger.Mouseenter;
+  [Parameter] public string Theme { get; set; } = TooltipTheme.Dark;
   [Parameter] public string Title { get; set; } = string.Empty;
   [Parameter] public string Width { get; set; } = string.Empty;
   [Parameter] public string CustomClass { get; set; } = string.Empty;
@@ -71,7 +72,7 @@
   [Parameter] public bool Show { get; set; } = true;
 
   private string TargetClass => $"tooltip {Placement}";
-  private string ContentClass => $"tooltip--content {CustomClass}";
+  private string ContentClass => $"tooltip--content {CustomClass} {Theme}";
   private string ContentStyle
   {
     get

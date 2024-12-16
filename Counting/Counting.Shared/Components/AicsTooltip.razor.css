@@ -26,9 +26,7 @@
 .tooltip--content {
   position: absolute;
   max-width: 240px !important;
-  background-color: var(--tooltip-background-color);
   font-size: var(--tooltip-font-size);
-  color: var(--tooltip-font-color);
   padding: var(--tooltip-padding-top) var(--tooltip-padding-right) var(--tooltip-padding-bottom) var(--tooltip-padding-left);
   border-radius: 4px;
   font-weight: 400;
@@ -37,6 +35,15 @@
   text-align: unset;
   box-sizing: border-box;
   z-index: 999;
+}
+.tooltip--content.dark {
+  background-color: var(--tooltip-background-color);
+  color: var(--tooltip-font-color);
+}
+.tooltip--content.light {
+  border: 1px solid var(--user-control-nav-border-color);
+  background-color: var(--user-control-nav-background-color);
+  color: var(--user-control-action-color);
 }
 .tooltip--content::-webkit-scrollbar {
   width: 4px;

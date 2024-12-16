@@ -29,9 +29,10 @@
       <div class="dropdown-select--tags-icon"></div>
     }
   </div>
-  <AicsError
+  <AicsEllipsis
     Show="@ShowError"
-    Message="@ErrorMessage"/>
+    Text="@ErrorMessage"
+    Error="@true"/>
   @if (_isOpen)
   {
     <div

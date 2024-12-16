@@ -1,15 +1,26 @@
-﻿<div class="nav-item">
-  <div class="menu-item menu-item--sub" @onclick="() => _isExpand = !_isExpand">
+﻿<div
+  class="@($"nav-item {(Open ? "open" : "close")}")"
+  @onmouseenter="ItemMouseenter"
+  @onmouseleave="ItemMouseleave">
+  <div
+    class="menu-item menu-item--sub"
+    @onclick="ItemClick">
     <div class="menu-item--icon" style="@Common.GetIcon(Item.Icon)"></div>
     <div class="menu-item--text">@Item.Title</div>
-    <div class="@ArrowClass"></div>
+    @if (Open)
+    {
+      <div class="@ArrowClass"></div>
+    }
   </div>
-  @if (_isExpand)
+  @if (Expand)
   {
-    <div class="item-group">
+    <div
+      class="item-group"
+      @onmouseenter="ItemMouseenter"
+      @onmouseleave="ItemMouseleave">
       @foreach (var item in Item.Children)
       {
-        <NavLink class="menu-item" href="@item.Href" @onclick="OnClick">
+        <NavLink class="@ItemClass(item.Href)" href="@item.Href" @onclick="OnClick">
           <div class="menu-item--icon" style="@Common.GetIcon(Common.HandlePath("images/component/dot/normal.svg"))"></div>
           <div class="menu-item--text">@item.Title</div>
         </NavLink>
@@ -19,12 +30,40 @@
 </div>
 
 @code {
+
+  [Parameter] public bool Open { get; set; } = true;
+  [Parameter] public bool IsExpand { get; set; }
   [Parameter] public NavSub Item { get; set; } = new();
   [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
+  [Parameter] public EventCallback<bool> IsExpandChanged { get; set; }
 
-  private string ArrowClass => $"menu-item--arrow {(_isExpand ? "open" : "close")}";
+  private string ArrowClass => $"menu-item--arrow {(Expand ? "open" : "close")}";
 
-  private bool _isExpand;
+  private bool Expand {
+    get => IsExpand;
+    set {
+      IsExpand = value;
+      IsExpandChanged.InvokeAsync(value);
+    }
+  }
 
+  private string ItemClass(string path)
+  {
+    return $"menu-item{(Navigation.Uri == path ? " active" : "")}";
+  }
+
+  private void ItemClick()
+  {
+    if (Open) Expand = !Expand;
+    // Expand = !Expand;
+  }
+  private void ItemMouseenter()
+  {
+    if (!Open) Expand = true;
+  }
+  private void ItemMouseleave()
+  {
+    if (!Open) Expand = false;
+  }
 
 }

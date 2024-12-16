@@ -1,24 +1,26 @@
 @if (Show)
 {
-  <div class="error">
+  <div class="@CustomClass">
     <AicsTooltip Show="@_show" Placement="@TooltipPlacement.BottomStart">
       <TooltipTarget>
-        <div @ref="_content" class="error__content">@Message</div>
+        <div @ref="_content" class="ellipsis__content">@Text</div>
       </TooltipTarget>
-      <TooltipContent>@Message</TooltipContent>
+      <TooltipContent>@Text</TooltipContent>
     </AicsTooltip>
   </div>
 }
 
-
 @code {
 
-  [Parameter] public string Message { get; set; } = string.Empty;
+  [Parameter] public string Text { get; set; } = string.Empty;
   [Parameter] public bool Show { get; set; }
+  [Parameter] public bool Error { get; set; }
+
+  private string CustomClass => $"ellipsis{(Error ? " error" : "")}";
 
   private bool _show;
   private ElementReference _content;
-  private DotNetObjectReference<AicsError>? _reference;
+  private DotNetObjectReference<AicsEllipsis>? _reference;
 
   [JSInvokable]
   public void IsTextOverflow(bool isTextOverflow, int index)

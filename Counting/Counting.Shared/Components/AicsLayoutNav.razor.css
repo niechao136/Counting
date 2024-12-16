@@ -167,16 +167,37 @@
 .menu ::deep .menu-item:hover .menu-item--arrow.open:after {
   background-color: var(--layout-nav-color_hover) !important;
 }
+.menu ::deep .menu-item.active,
 .menu ::deep .menu-item:active {
   color: var(--layout-nav-color-router_active) !important;
   background-color: var(--layout-nav-background-color-router_active) !important;
 }
+.menu ::deep .menu-item.active .menu-item--icon,
 .menu ::deep .menu-item:active .menu-item--icon {
   background-color: var(--layout-nav-color-router_active) !important;
 }
+.menu ::deep .menu-item.active .menu-item--arrow.open:before,
 .menu ::deep .menu-item:active .menu-item--arrow.open:before {
   background-color: var(--layout-nav-color-router_active) !important;
 }
+.menu ::deep .menu-item.active .menu-item--arrow.open:after,
 .menu ::deep .menu-item:active .menu-item--arrow.open:after {
   background-color: var(--layout-nav-color-router_active) !important;
+}
+.menu ::deep .menu-item.close {
+  height: var(--layout-nav-collapse-link1-height);
+  font-size: var(--layout-nav-collapse-link-font-size);
+  font-weight: 400;
+  justify-content: center;
+  padding: 0;
+  background-color: var(--layout-nav-background-color_normal);
+  box-shadow: none;
+}
+.menu ::deep .menu-item.close .menu-item--icon {
+  width: var(--layout-nav-collapse-link-icon-width);
+  height: var(--layout-nav-collapse-link-icon-height);
+  mask-size: var(--layout-nav-collapse-link-icon-width) var(--layout-nav-collapse-link-icon-height);
+}
+.menu ::deep .menu-item.close .menu-item--text {
+  display: none;
 }

@@ -29,6 +29,12 @@ public static class TooltipTrigger
   public const string Mouseenter = "mouseenter";
 }
 
+public static class TooltipTheme
+{
+  public const string Dark = "dark";
+  public const string Light = "light";
+}
+
 public class DomRect
 {
   public double Bottom { get; set; }

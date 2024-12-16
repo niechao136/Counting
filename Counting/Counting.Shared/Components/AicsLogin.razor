@@ -38,9 +38,10 @@
             IsError="@IsError"/>
         </div>
       </div>
-      <AicsError
+      <AicsEllipsis
         Show="@(!string.IsNullOrEmpty(Form.ErrorMessage))"
-        Message="@Form.ErrorMessage" />
+        Text="@Form.ErrorMessage"
+        Error="@true"/>
     </div>
     @if (!ChangePassword)
     {

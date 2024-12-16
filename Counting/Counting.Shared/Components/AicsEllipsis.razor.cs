@@ -2,6 +2,6 @@ using Microsoft.AspNetCore.Components;
 
 namespace Counting.Shared.Components;
 
-public partial class AicsError : ComponentBase
+public partial class AicsEllipsis : ComponentBase
 {
 }
