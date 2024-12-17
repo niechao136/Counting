@@ -1,6 +1,14 @@
 ﻿@page "/Ranking"
+
+<PageTitle>Ranking</PageTitle>
+
 <h3>Ranking</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Ranking"]);
+  }
+
 }

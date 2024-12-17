@@ -58,6 +58,7 @@
     Actions="@UserActions"
     Footer="@UserFooter"
     Name="@UserName"
+    Open="@IsExpand"
     Role="@UserRole"/>
 </div>
 
@@ -84,7 +85,7 @@
 
   private string ItemClass(string path)
   {
-    return $"menu-item{(Navigation.Uri == path ? " active" : "")} {(IsExpand ? "open" : "close")}";
+    return $"menu-item{(Navigation.Uri.Split("?")[0].EndsWith(path) ? " active" : "")} {(IsExpand ? "open" : "close")}";
   }
 
   private void Expand(int index, bool expand)
@@ -103,7 +104,8 @@
   {
     for (var i = 0; i < NavList.Count; i++)
     {
-      _expand[i] = false;
+      var sub = NavList[i].Children.SingleOrDefault(sub => Navigation.Uri.Split("?")[0].EndsWith(sub.Href));
+      _expand[i] = sub != null;
     }
     base.OnInitialized();
   }

@@ -1,6 +1,14 @@
 ﻿@page "/QueuingRule"
-<h3>QueuingRule</h3>
+
+<PageTitle>Queuing Rule</PageTitle>
+
+<h3>Queuing Rule</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Queuing Rule"]);
+  }
+
 }

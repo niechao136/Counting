@@ -1,6 +1,14 @@
 ﻿@page "/Event"
+
+<PageTitle>Event</PageTitle>
+
 <h3>Event</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Event"]);
+  }
+
 }

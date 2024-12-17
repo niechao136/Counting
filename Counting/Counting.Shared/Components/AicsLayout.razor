@@ -135,7 +135,7 @@
         }
         break;
     }
-    if (change) StateHasChanged();
+    if (change) InvokeAsync(StateHasChanged);
   }
 
   private void MenuClick()

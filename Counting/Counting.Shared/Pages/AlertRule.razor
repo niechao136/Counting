@@ -1,6 +1,14 @@
 ﻿@page "/AlertRule"
-<h3>AlertRule</h3>
+
+<PageTitle>Alert Rule</PageTitle>
+
+<h3>Alert Rule</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Alert Rule"]);
+  }
+
 }

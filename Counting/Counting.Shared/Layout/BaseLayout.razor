@@ -11,7 +11,7 @@
     AppStore.Loading.Subscribe(onNext: list =>
     {
       _loading = list.Count > 0;
-      StateHasChanged();
+      InvokeAsync(StateHasChanged);
     });
   }
 

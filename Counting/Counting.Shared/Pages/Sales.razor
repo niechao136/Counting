@@ -1,6 +1,14 @@
 ﻿@page "/Sales"
-<h3>Sales</h3>
+
+<PageTitle>Sales Report</PageTitle>
+
+<h3>Sales Report</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Sales Report"]);
+  }
+
 }

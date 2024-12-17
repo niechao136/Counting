@@ -1,6 +1,14 @@
 ﻿@page "/RealTime"
-<h3>RealTime</h3>
+
+<PageTitle>Real-time Status</PageTitle>
+
+<h3>Real-time Status</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Real-time Status"]);
+  }
+
 }

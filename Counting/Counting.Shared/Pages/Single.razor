@@ -1,6 +1,14 @@
 ﻿@page "/Single"
-<h3>Single</h3>
+
+<PageTitle>Data Analysis</PageTitle>
+
+<h3>Data Analysis</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Data Analysis"]);
+  }
+
 }

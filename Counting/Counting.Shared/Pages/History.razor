@@ -1,6 +1,14 @@
 ﻿@page "/History"
-<h3>History</h3>
+
+<PageTitle>History Data</PageTitle>
+
+<h3>History Data</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["History Data"]);
+  }
+
 }

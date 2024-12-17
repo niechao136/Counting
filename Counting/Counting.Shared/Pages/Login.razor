@@ -78,7 +78,7 @@
         ServerVersion = res?["version"]?.ToString() ?? string.Empty,
         WebVersion = AppSetting.Get("INFO:VERSION")
       };
-      StateHasChanged();
+      await InvokeAsync(StateHasChanged);
     }
   }
 

@@ -1,6 +1,14 @@
 ﻿@page "/Notify"
-<h3>Notify</h3>
+
+<PageTitle>Notification</PageTitle>
+
+<h3>Notification</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Notification"]);
+  }
+
 }

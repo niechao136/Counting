@@ -27,7 +27,7 @@
   {
     if (_show == isTextOverflow) return;
     _show = isTextOverflow;
-    StateHasChanged();
+    InvokeAsync(StateHasChanged);
   }
 
   protected override async Task OnAfterRenderAsync(bool firstRender)

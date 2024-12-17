@@ -1,6 +1,6 @@
 ﻿<div class="user-control-nav">
   <AicsTooltip
-    Placement="@TooltipPlacement.RightEnd"
+    Placement="@Placement"
     Trigger="@TooltipTrigger.Click"
     Interactive="@true">
     <TooltipTarget>
@@ -90,6 +90,7 @@
   [Parameter] public string Name { get; set; } = "User Name";
   [Parameter] public string Role { get; set; } = string.Empty;
   [Parameter] public bool ShowName { get; set; } = true;
+  [Parameter] public bool Open { get; set; } = true;
   [Parameter] public List<UserAction> Actions { get; set; } = [];
   [Parameter] public UserFooter Footer { get; set; } = new();
   [Parameter] public EventCallback<bool> IsExpandChanged { get; set; }
@@ -107,6 +108,7 @@
     }
   }
   private string Abbreviation => Common.Abbreviation(Name);
+  private string Placement => Open ? TooltipPlacement.TopStart : TooltipPlacement.RightEnd;
 
   private bool _headerActive;
   private bool _headerHover;

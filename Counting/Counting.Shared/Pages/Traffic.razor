@@ -1,6 +1,14 @@
 ﻿@page "/Traffic"
-<h3>Traffic</h3>
+
+<PageTitle>Traffic Report</PageTitle>
+
+<h3>Traffic Report</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Traffic Report"]);
+  }
+
 }

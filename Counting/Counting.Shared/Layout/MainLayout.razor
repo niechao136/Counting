@@ -1,6 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
-<AicsLayout Breadcrumbs="@_breadcrumbs" NavList="@_nav">
+<AicsLayout
+  Breadcrumbs="@_breadcrumbs"
+  NavList="@_nav"
+  ShowBack="@_showBack"
+  Title="@_title">
   <BodySlot>
     @Body
     <BaseLayout/>
@@ -15,17 +19,9 @@
 
 @code
 {
-  private readonly List<HeaderBreadcrumb> _breadcrumbs = [
-    new()
-    {
-      Text = "Breadcrumb1"
-    },
-    new()
-    {
-      Text = "Breadcrumb2"
-    }
-  ];
-
+  private string _title = string.Empty;
+  private List<HeaderBreadcrumb> _breadcrumbs = [];
+  private bool _showBack;
   private readonly List<NavSub> _nav = [
     new()
     {
@@ -35,7 +31,7 @@
     },
     new()
     {
-      Title = "Notify",
+      Title = "Notification",
       Href = "/Notify",
       Icon = Common.HandlePath("images/nav/event.svg")
     },
@@ -160,4 +156,21 @@
       ]
     },
   ];
+
+  protected override void OnInitialized()
+  {
+    AppStore.TitleList.Subscribe(onNext: list =>
+    {
+      if (!list.Any()) return;
+      _title = list.Any() ? list[^1] : string.Empty;
+      _breadcrumbs = list.Any() ? list[..^1].Select(text => new HeaderBreadcrumb { Text = text }).ToList() : [];
+      InvokeAsync(StateHasChanged);
+    });
+    AppStore.TitleCount.Subscribe(onNext: count =>
+    {
+      if (_showBack == count > 0) return;
+      _showBack = count > 0;
+      InvokeAsync(StateHasChanged);
+    });
+  }
 }

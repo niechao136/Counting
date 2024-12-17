@@ -2,6 +2,6 @@
 
 namespace Counting.Shared.Pages;
 
-public partial class Counting : ComponentBase
+public partial class CountingUnit : ComponentBase
 {
 }

@@ -1,6 +1,14 @@
 ﻿@page "/Kpi"
-<h3>Kpi</h3>
+
+<PageTitle>KPI Review</PageTitle>
+
+<h3>KPI Review</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["KPI Review"]);
+  }
+
 }

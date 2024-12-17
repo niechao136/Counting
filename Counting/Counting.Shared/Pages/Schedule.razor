@@ -1,6 +1,14 @@
 ﻿@page "/Schedule"
-<h3>Schedule</h3>
+
+<PageTitle>Schedule Rule</PageTitle>
+
+<h3>Schedule Rule</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Schedule Rule"]);
+  }
+
 }

@@ -1,6 +1,14 @@
 ﻿@page "/Setting"
-<h3>Setting</h3>
+
+<PageTitle>Weekly Report</PageTitle>
+
+<h3>Weekly Report</h3>
 
 @code {
-  
+
+  protected override void OnInitialized()
+  {
+    AppStore.SetTitle(["Weekly Report"]);
+  }
+
 }
