@@ -63,23 +63,25 @@
 </div>
 
 @code {
+  #region Logo
 
-  [Parameter] public bool IsExpand { get; set; } = true;
   [Parameter] public string LogoImg { get; set; } = Common.HandlePath("images/component/layout/logo-nav.png");
-  [Parameter] public bool ShowBrand { get; set; } = true;
   [Parameter] public string Subtitle { get; set; } = "Subtitle Name";
   [Parameter] public string HomeHref { get; set; } = "/Overview";
   [Parameter] public EventCallback<MouseEventArgs> OnToggle { get; set; }
+
+  #endregion
+  #region Brand
+
+  [Parameter] public bool ShowBrand { get; set; } = true;
   [Parameter] public string BrandId { get; set; } = "Brand Id";
   [Parameter] public List<DropdownOption> BrandOption { get; set; } = [];
+
+  #endregion
+  #region Menu
+
   [Parameter] public List<NavSub> NavList { get; set; } = [];
   [Parameter] public EventCallback<MouseEventArgs> ItemClick { get; set; }
-  [Parameter] public string UserName { get; set; } = "User Name";
-  [Parameter] public string UserRole { get; set; } = string.Empty;
-  [Parameter] public List<UserAction> UserActions { get; set; } = [];
-  [Parameter] public UserFooter UserFooter { get; set; } = new();
-
-  private string NavClass => $"nav nav--{(IsExpand ? "open" : "close")}";
 
   private Dictionary<int, bool> _expand = new();
 
@@ -87,7 +89,6 @@
   {
     return $"menu-item{(Navigation.Uri.Split("?")[0].EndsWith(path) ? " active" : "")} {(IsExpand ? "open" : "close")}";
   }
-
   private void Expand(int index, bool expand)
   {
     if (expand)
@@ -100,6 +101,21 @@
     _expand[index] = expand;
   }
 
+  #endregion
+  #region User Control
+
+  [Parameter] public string UserName { get; set; } = "User Name";
+  [Parameter] public string UserRole { get; set; } = string.Empty;
+  [Parameter] public List<UserAction> UserActions { get; set; } = [];
+  [Parameter] public UserFooter UserFooter { get; set; } = new();
+
+  #endregion
+  #region Nav
+
+  [Parameter] public bool IsExpand { get; set; } = true;
+
+  private string NavClass => $"nav nav--{(IsExpand ? "open" : "close")}";
+
   protected override void OnInitialized()
   {
     for (var i = 0; i < NavList.Count; i++)
@@ -110,4 +126,5 @@
     base.OnInitialized();
   }
 
+  #endregion
 }

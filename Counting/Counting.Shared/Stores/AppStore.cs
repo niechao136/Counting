@@ -6,7 +6,9 @@ namespace Counting.Shared.Stores;
 public static class AppStore
 {
   #region Loading
+
   public static readonly BehaviorSubject<List<string>> Loading = new([]);
+
   public static void CloseLoading()
   {
     Loading.OnNext([]);
@@ -19,10 +21,13 @@ public static class AppStore
   {
     Loading.OnNext(Loading.Value.Where(s => s != key).ToList());
   }
+
   #endregion Loading
   #region Header Title
+
   public static readonly BehaviorSubject<List<string>> TitleList = new([]);
   public static readonly BehaviorSubject<int> TitleCount = new(0);
+
   public static void SetTitle(List<string> list)
   {
     TitleList.OnNext(list);
@@ -45,5 +50,6 @@ public static class AppStore
     TitleList.OnNext(TitleList.Value[..^min].ToList());
     TitleCount.OnNext(TitleCount.Value - min);
   }
+
   #endregion Header Title
 }

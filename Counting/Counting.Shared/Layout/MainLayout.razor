@@ -4,7 +4,11 @@
   Breadcrumbs="@_breadcrumbs"
   NavList="@_nav"
   ShowBack="@_showBack"
-  Title="@_title">
+  Title="@_title"
+  UserActions="@_actions"
+  UserFooter="@_footer"
+  UserName="@_name"
+  UserRole="@_role">
   <BodySlot>
     @Body
     <BaseLayout/>
@@ -19,9 +23,16 @@
 
 @code
 {
+  #region Header
+
   private string _title = string.Empty;
   private List<HeaderBreadcrumb> _breadcrumbs = [];
   private bool _showBack;
+
+  #endregion
+  #region Side
+  #region Nav
+
   private readonly List<NavSub> _nav = [
     new()
     {
@@ -157,6 +168,51 @@
     },
   ];
 
+  #endregion
+  #region User Control
+
+  private string _name = string.Empty;
+  private string _role = string.Empty;
+  private UserFooter _footer = new();
+  private readonly List<UserAction> _actions = [
+    new()
+    {
+      GroupName = "Change Language",
+      Actions = ["English", "简体中文", "繁體中文"]
+    },
+    new()
+    {
+      Action = "Change Password"
+    },
+    new()
+    {
+      Action = "Logout"
+    }
+  ];
+
+  private async Task GetVersion()
+  {
+    var str = await Api.PostAsync("/api/server/info");
+    var res = JsonConvert.DeserializeObject<JObject>(str);
+    LoginStore.Version.OnNext(res?["version"]?.ToString() ?? string.Empty);
+    LoginStore.IsPrivate.OnNext(res?["cloud"]?.ToString() == "Private");
+  }
+  private async Task GetOwner()
+  {
+    var data = new JObject
+    {
+      new JProperty("user_id", LoginStore.UserId.Value),
+      new JProperty("token", LoginStore.Token.Value)
+    };
+    var str = await Api.PostAsync("/api/user/info", data);
+    var res = JsonConvert.DeserializeObject<JObject>(str);
+    LoginStore.Owner.OnNext(res?["user"] ?? null);
+  }
+
+  #endregion
+  #endregion
+  #region Init
+
   protected override void OnInitialized()
   {
     AppStore.TitleList.Subscribe(onNext: list =>
@@ -173,4 +229,33 @@
       InvokeAsync(StateHasChanged);
     });
   }
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender && Common.IsClient(JsRuntime))
+    {
+      AppStore.StartLoading("layout");
+      await Session.InitAsync(JsRuntime);
+      if (LoginStore.Token.Value == null)
+      {
+        Navigation.NavigateTo("/");
+        AppStore.CloseLoading();
+        return;
+      }
+
+      await GetVersion();
+      _footer = new UserFooter
+      {
+        ServerVersion = LoginStore.Version.Value,
+        WebVersion = AppSetting.Get("INFO:VERSION")
+      };
+
+      await GetOwner();
+      _name = LoginStore.Owner.Value?["fullname"]?.ToString() ?? string.Empty;
+      int.TryParse(LoginStore.Owner.Value?["roleid"]?.ToString(), out var role);
+      _role = Common.UserRole[role];
+      AppStore.StopLoading("layout");
+    }
+  }
+
+  #endregion
 }

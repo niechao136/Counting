@@ -20,6 +20,8 @@ public static class Common
   public static string Md5String(string target) =>
     Convert.ToHexStringLower(Md5.ComputeHash(Encoding.UTF8.GetBytes(target)));
 
+  public static readonly List<string> UserRole = [string.Empty, "Admin", "Manager", "User"];
+
   public static readonly Regex EmailRegex = new(@"^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9_\-.]+.[a-zA-Z]{2,4}$");
   public static readonly Regex EnglishRegex = new("[0-9a-zA-Z]");
 

@@ -1,10 +1,10 @@
-.selection-checkbox {
+.checkbox {
   height: 24px;
   display: inline-flex;
   align-items: center;
   position: relative;
 }
-.selection-checkbox .selection-checkbox-box {
+.checkbox .checkbox-box {
   width: 16px;
   height: 16px;
   display: flex;
@@ -12,14 +12,14 @@
   justify-content: center;
   position: relative;
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"] {
+.checkbox .checkbox-box input[type="checkbox"] {
   position: absolute;
   top: 0;
   left: 0;
   margin: 0;
   appearance: none;
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"]:after {
+.checkbox .checkbox-box input[type="checkbox"]:after {
   position: absolute;
   top: 0;
   left: 0;
@@ -32,44 +32,44 @@
   background-repeat: no-repeat;
   background-size: 16px 16px;
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-normal:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-normal:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/unselected.svg");
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-normal:checked:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-normal:checked:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/selected.svg");
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-normal:disabled:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-normal:disabled:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/unselected-disable.svg");
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-normal:disabled:checked:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-normal:disabled:checked:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/selected-disable.svg");
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-dash:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-dash:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/unselected.svg");
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-dash:checked:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-dash:checked:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/sub-selected.svg");
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-dash:disabled:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-dash:disabled:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/unselected-disable.svg");
 }
-.selection-checkbox .selection-checkbox-box input[type="checkbox"].selection-checkbox-dash:disabled:checked:after {
+.checkbox .checkbox-box input[type="checkbox"].checkbox-dash:disabled:checked:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/sub-selected-disable.svg");
 }
-.selection-checkbox__hover .selection-checkbox-box input[type="checkbox"].selection-checkbox-normal:after {
+.checkbox__hover .checkbox-box input[type="checkbox"].checkbox-normal:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/unselected-hover.svg");
 }
-.selection-checkbox__hover .selection-checkbox-box input[type="checkbox"].selection-checkbox-normal:checked:after {
+.checkbox__hover .checkbox-box input[type="checkbox"].checkbox-normal:checked:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/selected-hover.svg");
 }
-.selection-checkbox__hover .selection-checkbox-box input[type="checkbox"].selection-checkbox-dash:after {
+.checkbox__hover .checkbox-box input[type="checkbox"].checkbox-dash:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/unselected-hover.svg");
 }
-.selection-checkbox__hover .selection-checkbox-box input[type="checkbox"].selection-checkbox-dash:checked:after {
+.checkbox__hover .checkbox-box input[type="checkbox"].checkbox-dash:checked:after {
   background-image: url("/_content/Counting.Shared/images/component/checkbox/sub-selected-hover.svg");
 }
 
-.selection-checkbox .selection-checkbox--text {
+.checkbox .checkbox--text {
   width: calc(100% - 16px - 8px);
   font-size: 14px;
   margin-left: 8px;
@@ -78,26 +78,26 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.selection-checkbox--selected .selection-checkbox--text {
+.checkbox--selected .checkbox--text {
   color: var(--selection-checkbox-font-color-selected);
 }
-.selection-checkbox--selected.selection-checkbox--disabled .selection-checkbox--text {
+.checkbox--selected.checkbox--disabled .checkbox--text {
   color: var(--selection-checkbox-font-color_disabled);
 }
-.selection-checkbox--selected.selection-checkbox__hover .selection-checkbox--text {
+.checkbox--selected.checkbox__hover .checkbox--text {
   color: var(--selection-checkbox-font-color-selected_hover);
 }
-.selection-checkbox--unselected .selection-checkbox--text {
+.checkbox--unselected .checkbox--text {
   color: var(--selection-checkbox-font-color-unselected);
 }
-.selection-checkbox--unselected.selection-checkbox--disabled .selection-checkbox--text {
+.checkbox--unselected.checkbox--disabled .checkbox--text {
   color: var(--selection-checkbox-font-color_disabled);
 }
-.selection-checkbox--unselected.selection-checkbox__hover .selection-checkbox--text {
+.checkbox--unselected.checkbox__hover .checkbox--text {
   color: var(--selection-checkbox-font-color-unselected_hover);
 }
 
-.selection-checkbox .selection-checkbox--modal {
+.checkbox .checkbox--modal {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -105,6 +105,6 @@
   z-index: 5;
   cursor: pointer;
 }
-.selection-checkbox .selection-checkbox--modal--disabled {
+.checkbox .checkbox--modal--disabled {
   cursor: not-allowed;
 }

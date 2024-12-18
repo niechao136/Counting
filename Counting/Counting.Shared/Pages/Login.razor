@@ -10,8 +10,9 @@
   OnSubmit="SubmitLogin"/>
 
 @code {
+  #region Login
+
   private LoginForm _form = new();
-  private LoginFooter _footer = new();
 
   private bool AllowLogin => !string.IsNullOrEmpty(_form.Account) && !string.IsNullOrEmpty(_form.Password);
 
@@ -48,12 +49,33 @@
           await Local.DeleteAsync(JsRuntime, "BLAZOR_COUNTING_REMEMBER");
           await Local.DeleteAsync(JsRuntime, "BLAZOR_COUNTING_EMAIL");
         }
-        await Session.SetAsync(JsRuntime, "BLAZOR_COUNTING_TOKEN", str);
+        await Session.LoginAsync(JsRuntime, str);
         Navigation.NavigateTo("/overview");
       }
       AppStore.StopLoading("login");
     }
   }
+
+  #endregion
+  #region Footer
+
+  private LoginFooter _footer = new();
+
+  private async Task GetVersion()
+  {
+    var str = await Api.PostAsync("/api/server/info");
+    var res = JsonConvert.DeserializeObject<JObject>(str);
+    LoginStore.Version.OnNext(res?["version"]?.ToString() ?? string.Empty);
+    LoginStore.IsPrivate.OnNext(res?["cloud"]?.ToString() == "Private");
+  }
+
+  #endregion
+  #region Forget
+
+
+
+  #endregion
+  #region Init
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
@@ -70,16 +92,17 @@
           RememberMe = remember
         };
       }
-      var str = await Api.PostAsync("/api/server/info");
-      var res = JsonConvert.DeserializeObject<JObject>(str);
+
+      await GetVersion();
       _footer = new LoginFooter
       {
         Copyright = AppSetting.Get("INFO:COPYRIGHT"),
-        ServerVersion = res?["version"]?.ToString() ?? string.Empty,
+        ServerVersion = LoginStore.Version.Value,
         WebVersion = AppSetting.Get("INFO:VERSION")
       };
       await InvokeAsync(StateHasChanged);
     }
   }
 
+  #endregion
 }

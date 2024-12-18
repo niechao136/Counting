@@ -3,7 +3,7 @@
   @onclick="Click"
   @onmouseenter="Mouseenter"
   @onmouseleave="Mouseleave">
-  <div class="selection-checkbox-box">
+  <div class="checkbox-box">
     <input
       type="checkbox"
       class="@InputClass"
@@ -15,7 +15,7 @@
   </div>
   @if (ShowText)
   {
-    <label class="selection-checkbox--text" for="@_id">
+    <label class="checkbox--text" for="@_id">
       @Text
     </label>
   }
@@ -50,7 +50,6 @@
       OnInput.InvokeAsync(Value);
     }
   }
-
   private string CurrentMode
   {
     get => Mode;
@@ -64,18 +63,18 @@
   {
     get
     {
-      var checkboxClass = "selection-checkbox";
-      if (Disable) checkboxClass += " selection-checkbox--disabled";
-      if (_isHover) checkboxClass += " selection-checkbox__hover";
-      checkboxClass += $" selection-checkbox--{(CurrentValue ? "selected" : "unselected")}";
+      var checkboxClass = "checkbox";
+      if (Disable) checkboxClass += " checkbox--disabled";
+      if (_isHover) checkboxClass += " checkbox__hover";
+      checkboxClass += $" checkbox--{(CurrentValue ? "selected" : "unselected")}";
       checkboxClass += $" font-weight-{(FontBold ? "700" : "400")}";
       if (!string.IsNullOrEmpty(Class)) checkboxClass += $" {Class}";
       return checkboxClass;
     }
   }
-  private string InputClass => $"selection-checkbox-{CurrentMode}";
+  private string InputClass => $"checkbox-{CurrentMode}";
   private string ModalClass =>
-    $"selection-checkbox--modal {(Disable ? "selection-checkbox--modal--disabled" : string.Empty)}";
+    $"checkbox--modal {(Disable ? "checkbox--modal--disabled" : string.Empty)}";
   private bool ShowText => !string.IsNullOrEmpty(Text);
 
   private void Click()

@@ -33,6 +33,6 @@
   }
   private string MaskStyle => string.IsNullOrEmpty(SrcString) ? string.Empty
     : $"mask-image:url({SrcString});-webkit-mask-image:url({SrcString});";
-  private string IconClass => $"aics-icon {(string.IsNullOrEmpty(Class) ? Class : string.Empty)}";
+  private string IconClass => $"icon {(string.IsNullOrEmpty(Class) ? Class : string.Empty)}";
 
 }

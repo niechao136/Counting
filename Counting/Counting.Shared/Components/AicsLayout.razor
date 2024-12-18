@@ -5,6 +5,10 @@
       <AicsLayoutNav
         IsExpand="@_isExpand"
         NavList="NavList"
+        UserActions="@UserActions"
+        UserFooter="@UserFooter"
+        UserName="@UserName"
+        UserRole="@UserRole"
         OnToggle="() => _isExpand = !_isExpand"/>
     </aside>
   }
@@ -67,6 +71,10 @@
           IsExpand="@_isExpand"
           NavList="NavList"
           ItemClick="CloseBackdrop"
+          UserActions="@UserActions"
+          UserFooter="@UserFooter"
+          UserName="@UserName"
+          UserRole="@UserRole"
           OnToggle="() => _showMenu = !_showMenu"/>
       </div>
     </div>
@@ -74,22 +82,65 @@
 </div>
 
 @code {
+  #region Side
+  #region Nav
+
+  [Parameter] public List<NavSub> NavList { get; set; } = [];
+
+  private string NavHiddenClass => $"nav-hidden{(_showMenu ? " display-black" : " display-none")}";
+
+  private bool _isExpand = true;
+  private bool _showMenu;
+
+  private void CloseBackdrop()
+  {
+    _showMenu = false;
+  }
+
+  #endregion
+  #region Brand
+
+  [Parameter] public bool ShowBrand { get; set; } = true;
+  [Parameter] public string BrandId { get; set; } = "Brand Id";
+  [Parameter] public List<DropdownOption> BrandOption { get; set; } = [];
+
+  #endregion
+  #region User Control
+
+  [Parameter] public string UserName { get; set; } = "User Name";
+  [Parameter] public string UserRole { get; set; } = string.Empty;
+  [Parameter] public List<UserAction> UserActions { get; set; } = [];
+  [Parameter] public UserFooter UserFooter { get; set; } = new();
+
+  #endregion
+  #endregion
+  #region Header
+
   [Parameter] public bool ShowBack { get; set; } = true;
   [Parameter] public EventCallback<MouseEventArgs> BackClick { get; set; }
   [Parameter] public List<HeaderBreadcrumb> Breadcrumbs { get; set; } = [];
   [Parameter] public EventCallback<(MouseEventArgs, int, HeaderBreadcrumb)> BreadcrumbClick { get; set; }
   [Parameter] public string Title { get; set; } = "Page Title";
   [Parameter] public RenderFragment? HeaderSlot { get; set; }
+
+  private string TitleClass => $"header--title{(Breadcrumbs.Count > 0 ? " with-breadcrumb" : "")}";
+
+  private void MenuClick()
+  {
+    _showMenu = true;
+  }
+
+  #endregion
+  #region Body
+
   [Parameter] public RenderFragment? BodySlot { get; set; }
-  [Parameter] public List<NavSub> NavList { get; set; } = [];
+
+  #endregion
+  #region Layout
 
   private string LayoutClass => $"layout {(_showSide ? _isExpand ? "nav-open" : "nav-close" : "no-side")}";
-  private string TitleClass => $"header--title{(Breadcrumbs.Count > 0 ? " with-breadcrumb" : "")}";
-  private string NavHiddenClass => $"nav-hidden{(_showMenu ? " display-black" : " display-none")}";
 
-  private bool _showMenu;
   private bool _showSide = true;
-  private bool _isExpand = true;
   private DotNetObjectReference<AicsLayout>? _reference;
 
   [JSInvokable]
@@ -138,15 +189,6 @@
     if (change) InvokeAsync(StateHasChanged);
   }
 
-  private void MenuClick()
-  {
-    _showMenu = true;
-  }
-  private void CloseBackdrop()
-  {
-    _showMenu = false;
-  }
-
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
     if (Common.IsClient(JsRuntime) && firstRender)
@@ -155,4 +197,6 @@
       await JsRuntime.InvokeVoidAsync("window.AicsCommon.GetWindowWidth", _reference, "GetWindowWidth");
     }
   }
+
+  #endregion
 }
