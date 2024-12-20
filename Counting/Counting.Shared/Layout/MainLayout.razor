@@ -253,6 +253,7 @@
       _name = LoginStore.Owner.Value?["fullname"]?.ToString() ?? string.Empty;
       int.TryParse(LoginStore.Owner.Value?["roleid"]?.ToString(), out var role);
       _role = Common.UserRole[role];
+      await InvokeAsync(StateHasChanged);
       AppStore.StopLoading("layout");
     }
   }

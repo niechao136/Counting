@@ -2,7 +2,8 @@
   <AicsTooltip
     Placement="@Placement"
     Trigger="@TooltipTrigger.Click"
-    Interactive="@true">
+    Interactive="@true"
+    Theme="@TooltipTheme.Light">
     <TooltipTarget>
       <div class="@HeaderClass">
         <div class="header__abbreviation">@Abbreviation</div>
@@ -44,7 +45,8 @@
             var action1 = action;
             <AicsTooltip
               Placement="@TooltipPlacement.RightStart"
-              Trigger="@TooltipTrigger.Click">
+              Trigger="@TooltipTrigger.Click"
+              Theme="@TooltipTheme.Light">
               <TooltipTarget>
                 <div class="group-action">
                   <div class="group-action--text">@action1.GroupName</div>
